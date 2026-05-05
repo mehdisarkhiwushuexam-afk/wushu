@@ -3,28 +3,31 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IWUF — Système d'Examen des Arbitres Sanda</title>
+<title>IWUF — Examen des Arbitres Sanda</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:Arial,sans-serif;background:#0A0A0F;color:#E8E8F0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#0A0A0F;color:#E8E8F0}
 .screen{display:none;min-height:100vh}
 .screen.active{display:flex;flex-direction:column}
-.btn-primary{background:#C8102E;color:#fff;border:none;padding:14px 36px;cursor:pointer;font-size:15px}
-.btn-secondary{background:transparent;border:1px solid #888;color:#888;padding:14px 36px;cursor:pointer}
-.btn-primary:hover,.btn-secondary:hover{opacity:0.9}
+.btn-primary{background:#C8102E;color:#fff;border:none;padding:14px 36px;cursor:pointer;font-weight:bold;border-radius:5px}
+.btn-secondary{background:transparent;border:1px solid #D4AF37;color:#D4AF37;padding:14px 36px;cursor:pointer;border-radius:5px}
+.btn-primary:hover,.btn-secondary:hover{opacity:0.8}
 .landing-inner{text-align:center;padding:80px 20px}
 .landing-title{font-size:48px;margin-bottom:20px}
 .landing-title .r{color:#C8102E}
-.landing-title .b{color:#005ab5}
-.login-card{background:#1C1C28;border-radius:10px;padding:30px;max-width:400px;margin:auto}
+.landing-title .b{color:#1a7fd4}
+.login-card{background:#1C1C28;border-radius:10px;padding:30px;max-width:400px;margin:auto;border:1px solid #2A2A3A}
 .fg{margin-bottom:15px}
-.fg label{display:block;margin-bottom:5px;font-size:12px;color:#888}
-.fg input{width:100%;padding:10px;border-radius:5px;border:1px solid #333;background:#2A2A3A;color:#fff}
-.btn-blue{background:#005ab5;color:#fff;padding:12px;border:none;border-radius:5px;cursor:pointer;width:100%}
-.info-box{padding:10px;border-radius:5px;margin-bottom:15px;font-size:13px}
-.info-box.success{background:#064e3b;color:#22c55e}
-.info-box.info{background:#1e3a5f;color:#93c5fd}
-.info-box.error{background:#7f1d1d;color:#ef4444}
+.fg label{display:block;margin-bottom:5px;font-size:12px;color:#888;text-transform:uppercase}
+.fg input{width:100%;padding:12px;border-radius:5px;border:1px solid #2A2A3A;background:#2A2A3A;color:#fff;font-size:14px}
+.btn-blue{background:#005ab5;color:#fff;padding:12px;border:none;border-radius:5px;cursor:pointer;width:100%;font-weight:bold}
+.btn-blue:hover{background:#1a7fd4}
+.info-box{padding:12px;border-radius:5px;margin-bottom:15px;font-size:13px}
+.info-box.success{background:#064e3b;color:#22c55e;border:1px solid #22c55e}
+.info-box.info{background:#1e3a5f;color:#93c5fd;border:1px solid #1a7fd4}
+.info-box.error{background:#7f1d1d;color:#ef4444;border:1px solid #ef4444}
+.btn-link{background:none;border:none;color:#888;cursor:pointer;margin-top:10px}
+.btn-link:hover{color:#D4AF37}
 </style>
 </head>
 <body>
@@ -32,36 +35,44 @@ body{font-family:Arial,sans-serif;background:#0A0A0F;color:#E8E8F0}
 <!-- LANDING -->
 <div id="screen-landing" class="screen active">
   <div class="landing-inner">
+    <div style="display:inline-block;border:1px solid #D4AF37;color:#D4AF37;padding:6px 18px;margin-bottom:20px;font-size:11px">IWUF — WUSHU SANDA</div>
     <h1 class="landing-title"><span class="r">SANDA</span> <span class="b">ARBITRE</span><br>CERTIFICATION</h1>
-    <p style="margin:20px 0">Examen Théorique IWUF · Règlement 2024</p>
-    <div style="display:flex;gap:10px;justify-content:center">
+    <p style="margin:20px 0;color:#888">Examen Théorique · Règlement 2024 · Certification B/A</p>
+    <div style="display:flex;gap:15px;justify-content:center;flex-wrap:wrap">
       <button class="btn-primary" onclick="showCandidateLogin()">▶ COMMENCER L'EXAMEN</button>
-      <button class="btn-secondary" onclick="showScreen('admin-login')">⚙ ADMIN</button>
+      <button class="btn-secondary" onclick="showScreen('admin-login')">⚙ ADMINISTRATION</button>
     </div>
-    <div style="margin-top:40px">
-      <div>📊 <span id="landing-q-count">0</span> questions · ⏱️ <span id="landing-duration">60</span> min · 🎯 <span id="landing-pass">60</span>%</div>
+    <div style="margin-top:50px;display:flex;gap:30px;justify-content:center">
+      <div><span style="font-size:28px;font-weight:bold;color:#D4AF37" id="landing-q-count">0</span><br><span style="font-size:11px;color:#888">QUESTIONS</span></div>
+      <div><span style="font-size:28px;font-weight:bold;color:#D4AF37" id="landing-duration">60</span><br><span style="font-size:11px;color:#888">MINUTES</span></div>
+      <div><span style="font-size:28px;font-weight:bold;color:#D4AF37" id="landing-pass">60</span><br><span style="font-size:11px;color:#888">SEUIL %</span></div>
     </div>
   </div>
 </div>
 
 <!-- CANDIDATE LOGIN -->
 <div id="screen-candidate-login" class="screen">
-  <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0A0A0F">
+  <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#001f5b,#003a7d,#005ab5)">
     <div class="login-card">
-      <h2 style="margin-bottom:20px;text-align:center">Accès Candidat</h2>
-      <div id="prefilled-notice" class="info-box success" style="display:none">✅ Code pré-rempli depuis le lien</div>
-      <div class="info-box info">Entrez votre code de session</div>
+      <div style="text-align:center;margin-bottom:20px">
+        <div style="width:60px;height:60px;background:#D4AF37;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 15px;font-size:28px;color:#0A0A0F">武</div>
+        <h2 style="color:#D4AF37">IWUF — Évaluation</h2>
+        <p style="font-size:12px;color:#888">Accès Candidat</p>
+      </div>
+      <div id="prefilled-notice" class="info-box success" style="display:none">✅ Code de session pré-rempli depuis votre lien</div>
+      <div class="info-box info">📌 Entrez le code de session fourni par l'administrateur</div>
       <div class="fg">
         <label>CODE DE SESSION</label>
         <input type="text" id="cand-session-code" placeholder="SESSION-XXXXXX" oninput="this.value=this.value.toUpperCase()">
       </div>
       <div class="fg">
-        <label>VOTRE NOM</label>
+        <label>VOTRE NOM COMPLET</label>
         <input type="text" id="cand-name" placeholder="Nom Prénom">
       </div>
       <div id="cand-error" class="info-box error" style="display:none"></div>
-      <button class="btn-blue" onclick="startExam()">COMMENCER L'EXAMEN</button>
-      <button class="btn-secondary" style="margin-top:15px;width:100%" onclick="showScreen('landing')">← Retour</button>
+      <button class="btn-blue" onclick="startExam()">COMMENCER L'EXAMEN ▶</button>
+      <button class="btn-link" onclick="showScreen('landing')">← Retour à l'accueil</button>
+      <div class="info-box warning" style="margin-top:15px;background:#fef3c7;color:#92400e;border-color:#fbbf24">⚠️ Assurez-vous d'avoir un code de session valide</div>
     </div>
   </div>
 </div>
@@ -69,8 +80,10 @@ body{font-family:Arial,sans-serif;background:#0A0A0F;color:#E8E8F0}
 <!-- ADMIN LOGIN -->
 <div id="screen-admin-login" class="screen">
   <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0A0A0F">
-    <div class="login-card">
-      <h2 style="margin-bottom:20px;text-align:center">Administration</h2>
+    <div class="login-card" style="text-align:center">
+      <div style="font-size:32px;margin-bottom:10px">⚙</div>
+      <h2 style="color:#D4AF37;margin-bottom:5px">ACCÈS ADMINISTRATEUR</h2>
+      <p style="font-size:12px;color:#888;margin-bottom:20px">Session sécurisée</p>
       <div class="fg">
         <label>Identifiant</label>
         <input type="text" id="al-user" placeholder="admin">
@@ -81,32 +94,50 @@ body{font-family:Arial,sans-serif;background:#0A0A0F;color:#E8E8F0}
       </div>
       <div id="al-error" class="info-box error" style="display:none">Identifiants incorrects</div>
       <button class="btn-blue" onclick="doAdminLogin()">CONNEXION</button>
-      <div style="text-align:center;margin-top:15px;font-size:12px;color:#888">Démo: admin / sanda2024</div>
-      <button class="btn-secondary" style="margin-top:15px;width:100%" onclick="showScreen('landing')">← Retour</button>
+      <div style="margin-top:15px;font-size:11px;color:#555">Démo : admin / sanda2024</div>
+      <button class="btn-link" onclick="showScreen('landing')">← Retour accueil</button>
     </div>
   </div>
 </div>
 
 <!-- ADMIN PANEL -->
 <div id="screen-admin" class="screen">
-  <div style="background:#1C1C28;padding:20px;text-align:center;min-height:100vh">
-    <h2 style="color:#D4AF37">PANEL ADMINISTRATEUR</h2>
-    <div style="margin-top:30px">
-      <p>✅ Interface complète disponible</p>
-      <p style="margin-top:20px;color:#888">Sessions : <span id="admin-session-count">0</span></p>
-      <p>Questions : <span id="admin-q-count">0</span></p>
+  <div style="background:#0A0A0F;min-height:100vh">
+    <div style="background:#1C1C28;padding:15px 30px;border-bottom:2px solid #D4AF37">
+      <h2 style="color:#D4AF37">IWUF <span style="color:#888">ADMIN</span></h2>
     </div>
-    <button class="btn-secondary" style="margin-top:30px" onclick="showScreen('landing')">← Retour accueil</button>
+    <div style="display:grid;grid-template-columns:250px 1fr;min-height:calc(100vh - 70px)">
+      <div style="background:#1C1C28;border-right:1px solid #2A2A3A;padding:20px">
+        <div style="padding:10px;background:rgba(212,175,55,0.1);border-left:3px solid #D4AF37;color:#D4AF37;margin-bottom:5px">📊 Dashboard</div>
+        <div style="padding:10px;color:#888">🔑 Sessions</div>
+        <div style="padding:10px;color:#888">📝 Questions</div>
+      </div>
+      <div style="padding:30px">
+        <h3 style="margin-bottom:20px">Tableau de bord</h3>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-bottom:30px">
+          <div style="background:#1C1C28;padding:20px;border-radius:8px"><div style="font-size:32px;font-weight:bold;color:#D4AF37" id="dash-q">0</div><div style="color:#888">Questions</div></div>
+          <div style="background:#1C1C28;padding:20px;border-radius:8px"><div style="font-size:32px;font-weight:bold;color:#D4AF37" id="dash-s">0</div><div style="color:#888">Sessions</div></div>
+          <div style="background:#1C1C28;padding:20px;border-radius:8px"><div style="font-size:32px;font-weight:bold;color:#D4AF37" id="dash-r">0</div><div style="color:#888">Résultats</div></div>
+          <div style="background:#1C1C28;padding:20px;border-radius:8px"><div style="font-size:32px;font-weight:bold;color:#D4AF37" id="dash-pr">—</div><div style="color:#888">Taux réussite</div></div>
+        </div>
+        <div style="background:#1C1C28;padding:20px;border-radius:8px">
+          <p style="color:#D4AF37;margin-bottom:10px">✨ Interface d'administration complète</p>
+          <p style="color:#888;font-size:13px">Pour créer des sessions, ajouter des questions et gérer les résultats, utilisez l'interface complète.</p>
+          <button class="btn-secondary" style="margin-top:20px" onclick="showScreen('landing')">← Retour accueil</button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
 <script>
-// Données
+// ============ DONNÉES ============
 let questionBank = [];
 let activeSessions = {};
-let examConfig = { duration: 60, passThreshold: 60, adminPass: 'sanda2024' };
+let allResults = [];
+let examConfig = { duration: 60, nQuestions: 30, passThreshold: 60, shuffle: true, adminPass: 'sanda2024' };
 
-// Fonctions
+// ============ FONCTIONS ============
 function showScreen(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     const el = document.getElementById('screen-' + id);
@@ -120,13 +151,18 @@ function doAdminLogin() {
     const p = document.getElementById('al-pass').value;
     const err = document.getElementById('al-error');
     if (u === 'admin' && p === examConfig.adminPass) {
-        document.getElementById('admin-session-count').textContent = Object.keys(activeSessions).length;
-        document.getElementById('admin-q-count').textContent = questionBank.length;
+        updateDashboard();
         showScreen('admin');
     } else {
         err.style.display = 'block';
         setTimeout(() => err.style.display = 'none', 3000);
     }
+}
+
+function updateDashboard() {
+    document.getElementById('dash-q').textContent = questionBank.length;
+    document.getElementById('dash-s').textContent = Object.keys(activeSessions).length;
+    document.getElementById('dash-r').textContent = allResults.length;
 }
 
 function extractSessionCodeFromUrl() {
@@ -145,6 +181,22 @@ function extractSessionCodeFromUrl() {
     return null;
 }
 
+function saveToStorage() {
+    localStorage.setItem('iwuf_qbank', JSON.stringify(questionBank));
+    localStorage.setItem('iwuf_sessions', JSON.stringify(activeSessions));
+    localStorage.setItem('iwuf_results', JSON.stringify(allResults));
+    localStorage.setItem('iwuf_config', JSON.stringify(examConfig));
+}
+
+function loadFromStorage() {
+    try {
+        const q = localStorage.getItem('iwuf_qbank'); if(q) questionBank = JSON.parse(q);
+        const s = localStorage.getItem('iwuf_sessions'); if(s) activeSessions = JSON.parse(s);
+        const r = localStorage.getItem('iwuf_results'); if(r) allResults = JSON.parse(r);
+        const c = localStorage.getItem('iwuf_config'); if(c) examConfig = {...examConfig, ...JSON.parse(c)};
+    } catch(e) {}
+}
+
 function startExam() {
     const code = document.getElementById('cand-session-code').value.trim().toUpperCase();
     const name = document.getElementById('cand-name').value.trim();
@@ -152,32 +204,69 @@ function startExam() {
     err.style.display = 'none';
     
     if (!code) { err.textContent = '❌ Entrez le code de session'; err.style.display = 'block'; return; }
-    if (!name) { err.textContent = '❌ Entrez votre nom'; err.style.display = 'block'; return; }
+    if (!name) { err.textContent = '❌ Entrez votre nom complet'; err.style.display = 'block'; return; }
     
-    // Simuler une session si elle n'existe pas
-    if (!activeSessions[code]) {
-        activeSessions[code] = { code: code, active: true, questionsCount: 10 };
+    let session = activeSessions[code];
+    
+    // Si session inexistante, la créer automatiquement
+    if (!session && questionBank.length > 0) {
+        let pool = [...questionBank];
+        if (examConfig.shuffle) pool = pool.sort(() => Math.random() - 0.5);
+        const count = Math.min(examConfig.nQuestions, pool.length);
+        
+        session = {
+            code: code,
+            questions: pool.slice(0, count),
+            questionsCount: count,
+            duration: examConfig.duration,
+            passScore: examConfig.passThreshold,
+            active: true,
+            createdAt: new Date().toISOString(),
+            candidates: {}
+        };
+        activeSessions[code] = session;
+        saveToStorage();
     }
     
-    if (!activeSessions[code].active) {
-        err.textContent = '❌ Session terminée'; 
+    if (!session) { 
+        err.textContent = '❌ Session introuvable. Veuillez contacter l\'administrateur.'; 
         err.style.display = 'block'; 
-        return;
+        return; 
     }
     
-    alert(`✅ Bienvenue ${name} !\nSession: ${code}\nL'examen commence.`);
+    if (!session.active) { 
+        err.textContent = '❌ Cette session est terminée.'; 
+        err.style.display = 'block'; 
+        return; 
+    }
+    
+    // Démarrer l'examen
+    alert(`✅ Bienvenue ${name} !\n📋 Session: ${code}\n📊 ${session.questionsCount} questions\n⏱️ ${session.duration} minutes\n\nL'examen va commencer.`);
     showScreen('landing');
 }
 
-// Initialisation
+// ============ INITIALISATION ============
 window.addEventListener('DOMContentLoaded', () => {
-    // Questions par défaut
-    questionBank = [
-        { id: 1, text: "Combien de rounds en Sanda adulte ?", answer: 2 },
-        { id: 2, text: "Points pour un coup de pied à la tête ?", answer: 2 },
-        { id: 3, text: "Durée d'un round ?", answer: "2 minutes" }
-    ];
+    loadFromStorage();
     
+    // Questions par défaut si aucune
+    if (questionBank.length === 0) {
+        questionBank = [
+            {id:1, type:'sc', chapter:'Généralités', text:'Combien de rounds dispute-t-on en compétition Sanda adulte?', points:1, options:['1 round','2 rounds','3 rounds','4 rounds'], answer:2},
+            {id:2, type:'sc', chapter:'Méthodes & Notation', text:'Combien de points rapporte un coup de pied à la tête validé?', points:1, options:['1 point','2 points','3 points','0 point'], answer:1},
+            {id:3, type:'sc', chapter:'Fouls & Pénalités', text:'Combien de fautes personnelles entraînent la disqualification?', points:1, options:['2','3','4','5'], answer:1},
+            {id:4, type:'sc', chapter:'Équipement', text:'Quelle est la surface standard de la plateforme Sanda (leitai)?', points:1, options:['6×6 m','8×8 m','10×10 m','12×12 m'], answer:1},
+            {id:5, type:'sc', chapter:'Généralités', text:'Quelle est la durée d\'un round en compétition Sanda adulte?', points:1, options:['1 min 30','2 minutes','3 minutes','5 minutes'], answer:1},
+            {id:6, type:'tf', chapter:'Fouls & Pénalités', text:'Les coudes sont autorisés en Sanda compétition.', points:1, options:['Vrai','Faux'], answer:1},
+            {id:7, type:'sc', chapter:'Officials', text:'Combien d\'arbitres composent le panel en compétition IWUF?', points:1, options:['1 arbitre principal + 2 juges','1 arbitre de plateforme + 3 juges','1 arbitre central + 4 juges latéraux','2 arbitres + 1 juge principal'], answer:1},
+            {id:8, type:'tf', chapter:'Méthodes & Notation', text:'Une projection valide (adversaire chute, attaquant debout) rapporte 2 points.', points:1, options:['Vrai','Faux'], answer:0},
+            {id:9, type:'sc', chapter:'Généralités', text:'Quelle est la catégorie de poids la plus légère en Senior masculin IWUF 2024?', points:1, options:['48 kg','52 kg','56 kg','60 kg'], answer:1},
+            {id:10, type:'tf', chapter:'Équipement', text:'Le protège-dents est obligatoire en compétition Sanda.', points:1, options:['Vrai','Faux'], answer:0}
+        ];
+        saveToStorage();
+    }
+    
+    // Mise à jour des affichages
     document.getElementById('landing-q-count').textContent = questionBank.length;
     document.getElementById('landing-duration').textContent = examConfig.duration;
     document.getElementById('landing-pass').textContent = examConfig.passThreshold;
