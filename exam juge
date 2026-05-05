@@ -3,302 +3,31 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IWUF — Système d'Examen des Arbitres Sanda</title>
+<title>IWUF — Examen des Arbitres Sanda</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;600;700&family=Source+Sans+3:wght@300;400;600;700&display=swap');
-
-:root {
-  --red: #C8102E;
-  --blue: #003DA5;
-  --blue-mid: #005ab5;
-  --blue-light: #1a7fd4;
-  --gold: #D4AF37;
-  --dark: #0A0A0F;
-  --surface: #13131A;
-  --card: #1C1C28;
-  --border: #2A2A3A;
-  --text: #E8E8F0;
-  --muted: #888899;
-  --green: #22c55e;
-  --green-dark: #16a34a;
-  --orange: #F39C12;
-  --header-h: 64px;
-}
-
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Source Sans 3', sans-serif; background: var(--dark); color: var(--text); min-height: 100vh; overflow-x: hidden; }
-
-.screen { display: none; min-height: 100vh; }
-.screen.active { display: flex; flex-direction: column; animation: fadeIn .3s ease; }
-@keyframes fadeIn { from{opacity:0} to{opacity:1} }
-@keyframes fadeInUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
-@keyframes scaleIn { from{opacity:0;transform:scale(.9)} to{opacity:1;transform:scale(1)} }
-@keyframes slideLeft { from{opacity:0;transform:translateX(-16px)} to{opacity:1;transform:translateX(0)} }
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.6} }
-@keyframes pulseGreen { 0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,0)} 50%{box-shadow:0 0 0 8px rgba(34,197,94,.2)} }
-
-/* LANDING */
-#screen-landing {
-  background: linear-gradient(135deg, #0A0A0F 0%, #0D0D1A 50%, #0A0A12 100%);
-  align-items: center; justify-content: center; text-align: center; position: relative;
-}
-#screen-landing::before {
-  content:''; position:absolute; inset:0; pointer-events:none;
-  background: radial-gradient(ellipse 60% 40% at 50% 30%, rgba(0,61,165,.18) 0%, transparent 70%),
-              radial-gradient(ellipse 40% 30% at 80% 80%, rgba(200,16,46,.12) 0%, transparent 60%);
-}
-.landing-inner { position:relative; z-index:1; padding:40px 20px; max-width:700px; margin:0 auto; animation:fadeInUp .55s ease; }
-.landing-badge { display:inline-block; border:1px solid var(--gold); color:var(--gold); font-family:'Oswald',sans-serif; font-size:11px; letter-spacing:3px; padding:6px 18px; margin-bottom:28px; text-transform:uppercase; }
-.landing-title { font-family:'Oswald',sans-serif; font-size:clamp(36px,6vw,72px); font-weight:700; line-height:1; margin-bottom:8px; letter-spacing:-1px; }
-.landing-title .r { color:var(--red); }
-.landing-title .b { color:var(--blue-light); }
-.landing-sub { font-size:15px; color:var(--muted); margin-bottom:48px; letter-spacing:1px; }
-.divider-line { width:80px; height:2px; background:linear-gradient(90deg,transparent,var(--gold),transparent); margin:32px auto; }
-.btn-group { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
-.btn-primary {
-  background:linear-gradient(135deg,var(--red),#A00020); color:#fff; border:none; padding:14px 36px;
-  font-family:'Oswald',sans-serif; font-size:15px; letter-spacing:2px; text-transform:uppercase; cursor:pointer;
-  transition:all .2s; clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);
-}
-.btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(200,16,46,.4); }
-.btn-secondary {
-  background:transparent; color:var(--muted); border:1px solid var(--border); padding:14px 36px;
-  font-family:'Oswald',sans-serif; font-size:13px; letter-spacing:2px; text-transform:uppercase; cursor:pointer;
-  transition:all .2s; clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);
-}
-.btn-secondary:hover { border-color:var(--gold); color:var(--gold); }
-.stats-row { display:flex; gap:40px; justify-content:center; margin-top:48px; flex-wrap:wrap; }
-.stat-item { text-align:center; }
-.stat-num { font-family:'Oswald',sans-serif; font-size:32px; font-weight:700; color:var(--gold); }
-.stat-label { font-size:11px; color:var(--muted); letter-spacing:2px; text-transform:uppercase; }
-
-/* LOGIN CARDS */
-.login-screen-wrap {
-  min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px;
-  background:linear-gradient(135deg,#001f5b 0%,#003a7d 40%,#005ab5 80%,#1a7fd4 100%);
-}
-.login-card { background:white; border-radius:14px; box-shadow:0 20px 50px rgba(0,0,0,.3); width:100%; max-width:460px; overflow:hidden; color:#1e293b; animation:scaleIn .35s ease; }
-.login-card-header { background:linear-gradient(135deg,#001f5b,#005ab5); padding:28px 24px; text-align:center; color:white; }
-.login-logo { width:64px; height:64px; background:white; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 12px; font-family:'Oswald',sans-serif; font-size:26px; font-weight:900; color:#003a7d; }
-.login-card-header h2 { font-family:'Oswald',sans-serif; font-size:18px; font-weight:700; }
-.login-card-header p { font-size:11px; opacity:.8; margin-top:4px; }
-.login-card-body { padding:24px; }
-.fg { display:flex; flex-direction:column; gap:4px; margin-bottom:14px; }
-.fg label { font-size:11px; font-weight:600; color:#94a3b8; text-transform:uppercase; letter-spacing:.5px; }
-.fg input,.fg select,.fg textarea { padding:10px 14px; border:1.5px solid #e2e8f0; border-radius:8px; font-size:14px; font-family:'Source Sans 3',sans-serif; transition:border-color .2s; background:white; color:#1e293b; }
-.fg input:focus,.fg select:focus { outline:none; border-color:#1a7fd4; box-shadow:0 0 0 3px rgba(26,127,212,.12); }
-.btn-blue { display:block; width:100%; background:linear-gradient(135deg,#003a7d,#1a7fd4); color:white; border:none; padding:13px; font-family:'Oswald',sans-serif; font-size:15px; letter-spacing:2px; text-transform:uppercase; cursor:pointer; border-radius:8px; transition:all .2s; margin-top:8px; }
-.btn-blue:hover { transform:translateY(-1px); box-shadow:0 6px 20px rgba(0,90,181,.4); }
-.btn-link { background:none; border:none; cursor:pointer; font-family:'Source Sans 3',sans-serif; font-size:13px; color:#005ab5; text-decoration:underline; margin-top:12px; display:block; text-align:center; }
-.info-box { border-radius:8px; padding:12px 14px; font-size:13px; margin-bottom:14px; line-height:1.5; }
-.info-box.info { background:#eff6ff; border:1px solid #93c5fd; color:#1e40af; }
-.info-box.success { background:#f0fdf4; border:1px solid #86efac; color:#166534; }
-.info-box.warning { background:#fef3c7; border:1px solid #fbbf24; color:#92400e; }
-.info-box.error { background:#fef2f2; border:1px solid #fca5a5; color:#991b1b; }
-.code-display { background:#f0fdf4; border:2px solid #86efac; border-radius:10px; padding:16px; text-align:center; margin-bottom:14px; }
-.code-display .code { font-family:'Oswald',sans-serif; font-size:26px; font-weight:700; color:#166534; letter-spacing:2px; }
-.login-error { color:var(--red); font-size:13px; margin-top:8px; display:none; text-align:center; }
-
-/* ADMIN PANEL */
-#screen-admin { background:var(--dark); }
-.admin-top-bar { background:var(--surface); border-bottom:2px solid var(--border); padding:0 32px; display:flex; align-items:center; justify-content:space-between; height:var(--header-h); flex-shrink:0; }
-.admin-top-bar .brand { font-family:'Oswald',sans-serif; font-size:20px; font-weight:600; letter-spacing:1px; }
-.admin-top-bar .brand span { color:var(--gold); }
-.admin-layout { display:grid; grid-template-columns:220px 1fr; flex:1; min-height:calc(100vh - var(--header-h)); }
-.admin-sidebar { background:var(--surface); border-right:1px solid var(--border); padding:24px 0; }
-.sidebar-item { padding:12px 24px; font-size:14px; cursor:pointer; border-left:3px solid transparent; color:var(--muted); transition:all .2s; display:flex; align-items:center; gap:10px; }
-.sidebar-item:hover { color:var(--text); background:rgba(255,255,255,.04); }
-.sidebar-item.active { color:var(--gold); border-left-color:var(--gold); background:rgba(212,175,55,.06); }
-.admin-content { padding:32px; overflow-y:auto; }
-.admin-section { display:none; }
-.admin-section.active { display:block; animation:fadeInUp .25s ease; }
-.section-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:28px; flex-wrap:wrap; gap:12px; }
-.section-title { font-family:'Oswald',sans-serif; font-size:24px; font-weight:600; }
-
-/* BUTTONS */
-.btn-gold { padding:10px 24px; font-family:'Oswald',sans-serif; font-size:13px; letter-spacing:1px; text-transform:uppercase; cursor:pointer; border:none; background:linear-gradient(135deg,var(--gold),#B8960C); color:var(--dark); font-weight:700; transition:all .2s; border-radius:4px; }
-.btn-gold:hover { opacity:.9; transform:translateY(-1px); }
-.btn-success { padding:10px 24px; font-family:'Oswald',sans-serif; font-size:13px; letter-spacing:1px; text-transform:uppercase; cursor:pointer; border:none; background:linear-gradient(135deg,var(--green-dark),var(--green)); color:white; border-radius:4px; transition:all .2s; }
-.btn-success:hover { opacity:.9; }
-.btn-danger { padding:10px 24px; font-family:'Oswald',sans-serif; font-size:13px; letter-spacing:1px; text-transform:uppercase; cursor:pointer; border:none; background:var(--red); color:white; border-radius:4px; transition:all .2s; }
-.btn-sm { padding:6px 14px!important; font-size:12px!important; }
-.btn-xs { padding:4px 10px!important; font-size:11px!important; }
-
-/* STAT CARDS */
-.stats-cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:16px; margin-bottom:32px; }
-.stat-card { background:var(--card); border:1px solid var(--border); padding:20px; border-radius:4px; }
-.stat-card-num { font-family:'Oswald',sans-serif; font-size:36px; font-weight:700; color:var(--gold); }
-.stat-card-label { font-size:12px; color:var(--muted); letter-spacing:1px; margin-top:4px; }
-
-/* SESSION LIST */
-.session-item { display:flex; align-items:center; gap:10px; padding:16px 18px; border:1px solid var(--border); background:var(--card); border-radius:6px; margin-bottom:10px; flex-wrap:wrap; }
-.session-info { flex:1; min-width:200px; font-size:13px; }
-.session-code { font-family:'Oswald',sans-serif; font-size:20px; font-weight:600; color:var(--gold); letter-spacing:2px; }
-.badge-active { background:rgba(34,197,94,.15); border:1px solid var(--green); color:var(--green); padding:3px 10px; font-size:11px; font-family:'Oswald',sans-serif; letter-spacing:1px; border-radius:3px; }
-.badge-closed { background:rgba(200,16,46,.1); border:1px solid var(--red); color:var(--red); padding:3px 10px; font-size:11px; font-family:'Oswald',sans-serif; letter-spacing:1px; border-radius:3px; }
-
-/* LINK BOX */
-.link-box { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:16px; margin-top:10px; }
-.link-box-label { font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); margin-bottom:10px; }
-.link-row { display:flex; gap:10px; align-items:center; }
-.link-input { flex:1; background:rgba(255,255,255,.05); border:1px solid var(--border); color:var(--gold); padding:10px 14px; font-family:'Oswald',sans-serif; font-size:13px; letter-spacing:1px; border-radius:4px; outline:none; min-width:0; }
-.link-input:focus { border-color:var(--gold); }
-.btn-copy { padding:10px 18px; font-family:'Oswald',sans-serif; font-size:12px; letter-spacing:1px; text-transform:uppercase; cursor:pointer; border:1px solid var(--gold); background:none; color:var(--gold); transition:all .2s; white-space:nowrap; border-radius:4px; }
-.btn-copy:hover { background:var(--gold); color:var(--dark); }
-.btn-copy.copied { background:var(--green-dark); border-color:var(--green-dark); color:white; }
-
-/* QUESTION BANK */
-.filter-bar { display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap; align-items:center; }
-.filter-btn { padding:6px 16px; font-family:'Oswald',sans-serif; font-size:12px; letter-spacing:1px; text-transform:uppercase; cursor:pointer; border:1px solid var(--border); background:none; color:var(--muted); transition:all .15s; border-radius:4px; }
-.filter-btn.active { border-color:var(--gold); color:var(--gold); }
-.filter-btn:hover { border-color:var(--text); color:var(--text); }
-.search-input { flex:1; min-width:200px; background:var(--surface); border:1px solid var(--border); color:var(--text); padding:7px 12px; font-family:'Source Sans 3',sans-serif; font-size:14px; border-radius:4px; }
-.search-input:focus { outline:none; border-color:var(--gold); }
-.qb-item { background:var(--card); border:1px solid var(--border); padding:14px 18px; display:flex; align-items:flex-start; gap:14px; transition:all .2s; border-radius:4px; margin-bottom:8px; animation:slideLeft .2s ease; }
-.qb-item:hover { border-color:#3a3a4a; }
-.qb-check { width:20px; height:20px; border:1px solid var(--border); cursor:pointer; flex-shrink:0; margin-top:2px; display:flex; align-items:center; justify-content:center; transition:all .2s; border-radius:3px; }
-.qb-check.checked { background:var(--blue-mid); border-color:var(--blue-mid); }
-.qb-check.checked::after { content:'✓'; font-size:12px; color:#fff; }
-.qb-info { flex:1; }
-.qb-text { font-size:14px; line-height:1.5; margin-bottom:6px; }
-.qb-tags { display:flex; gap:6px; flex-wrap:wrap; }
-.qb-tag { font-size:10px; letter-spacing:1px; text-transform:uppercase; padding:2px 8px; border:1px solid var(--border); color:var(--muted); border-radius:20px; }
-.qb-tag.tf { border-color:var(--orange); color:var(--orange); }
-.qb-tag.mc { border-color:var(--blue-light); color:var(--blue-light); }
-.qb-tag.sc { border-color:var(--green); color:var(--green); }
-.qb-actions { display:flex; gap:6px; flex-shrink:0; }
-.btn-icon { width:30px; height:30px; border:1px solid var(--border); background:none; color:var(--muted); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:13px; transition:all .15s; border-radius:4px; }
-.btn-icon:hover { border-color:var(--red); color:var(--red); }
-.btn-icon.edit:hover { border-color:var(--gold); color:var(--gold); }
-
-/* CONFIG */
-.config-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:24px; }
-.config-item { background:var(--card); border:1px solid var(--border); padding:20px; border-radius:6px; }
-.config-label { font-size:12px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; margin-bottom:10px; }
-.config-input { width:100%; background:var(--surface); border:1px solid var(--border); color:var(--text); padding:8px 12px; font-family:'Source Sans 3',sans-serif; font-size:15px; border-radius:4px; }
-.config-input:focus { outline:none; border-color:var(--gold); }
-textarea.config-input { resize:vertical; min-height:80px; }
-.form-field { margin-bottom:16px; }
-.form-label { font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); margin-bottom:6px; display:block; }
-.form-input { width:100%; background:var(--surface); border:1px solid var(--border); color:var(--text); padding:10px 14px; font-family:'Source Sans 3',sans-serif; font-size:15px; border-radius:4px; }
-.form-input:focus { outline:none; border-color:var(--gold); }
-textarea.form-input { resize:vertical; min-height:80px; }
-.option-row { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
-.option-label-badge { background:var(--blue-mid); color:white; width:26px; height:26px; border-radius:5px; display:flex; align-items:center; justify-content:center; font-family:'Oswald',sans-serif; font-weight:700; font-size:13px; flex-shrink:0; }
-
-/* IMPORT */
-.import-zone { border:2px dashed var(--border); border-radius:8px; padding:30px; text-align:center; cursor:pointer; transition:all .2s; background:var(--surface); margin-bottom:16px; }
-.import-zone:hover { border-color:var(--gold); }
-.import-zone input { display:none; }
-.bulk-textarea { width:100%; min-height:130px; font-family:'Courier New',monospace; font-size:13px; padding:12px; border:1px solid var(--border); border-radius:6px; resize:vertical; background:var(--surface); color:var(--text); line-height:1.6; margin-top:8px; }
-.bulk-textarea:focus { outline:none; border-color:var(--gold); }
-
-/* RESULTS TABLE */
-.results-table { width:100%; border-collapse:collapse; font-size:14px; }
-.results-table th { text-align:left; padding:10px 14px; font-family:'Oswald',sans-serif; font-size:12px; letter-spacing:2px; color:var(--muted); text-transform:uppercase; border-bottom:1px solid var(--border); background:var(--surface); }
-.results-table td { padding:10px 14px; border-bottom:1px solid rgba(255,255,255,.04); }
-.badge-pass { color:var(--green); font-family:'Oswald',sans-serif; font-weight:600; }
-.badge-fail { color:var(--red); font-family:'Oswald',sans-serif; font-weight:600; }
-
-/* EXAM SCREEN */
-#screen-exam { background:var(--dark); }
-.exam-header { background:linear-gradient(90deg,#001845,#003DA5 50%,#1a7fd4); padding:0 20px; height:70px; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; box-shadow:0 4px 20px rgba(0,0,0,.3); }
-.exam-header-left { display:flex; align-items:center; gap:14px; }
-.exam-logo-sm { width:46px; height:46px; background:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Oswald',sans-serif; font-size:18px; font-weight:900; color:#003a7d; flex-shrink:0; }
-.exam-title-block h1 { font-family:'Oswald',sans-serif; font-size:15px; font-weight:700; line-height:1.2; color:white; }
-.exam-title-block p { font-size:10px; opacity:.8; color:white; }
-.exam-meta { display:flex; align-items:center; gap:16px; }
-.meta-item { display:flex; flex-direction:column; align-items:center; }
-.meta-value { font-family:'Oswald',sans-serif; font-size:14px; font-weight:700; color:white; }
-.meta-label { font-size:9px; opacity:.75; text-transform:uppercase; color:white; }
-.timer-display { background:rgba(255,255,255,.15); border:2px solid rgba(255,255,255,.3); border-radius:8px; padding:6px 14px; text-align:center; min-width:110px; }
-.timer-display .time-val { font-family:'Oswald',sans-serif; font-size:20px; font-weight:700; letter-spacing:2px; color:white; }
-.timer-display.urgent { background:rgba(200,16,46,.3); border-color:#fca5a5; animation:pulse 1s infinite; }
-.progress-bar-wrap { height:4px; background:rgba(255,255,255,.1); }
-.progress-bar-fill { height:100%; background:linear-gradient(90deg,var(--blue-mid),var(--green)); transition:width .3s; }
-.exam-body { flex:1; display:flex; overflow:hidden; }
-.exam-sidebar { width:220px; background:var(--surface); border-right:1px solid var(--border); padding:20px; overflow-y:auto; flex-shrink:0; }
-.sidebar-nav-title { font-family:'Oswald',sans-serif; font-size:11px; letter-spacing:3px; color:var(--muted); text-transform:uppercase; margin-bottom:14px; }
-.q-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:5px; }
-.q-btn { width:34px; height:34px; border:1px solid var(--border); background:var(--card); color:var(--muted); font-family:'Oswald',sans-serif; font-size:13px; cursor:pointer; transition:all .15s; display:flex; align-items:center; justify-content:center; border-radius:3px; }
-.q-btn.answered { background:rgba(0,90,181,.3); border-color:var(--blue-mid); color:white; }
-.q-btn.current { background:var(--red); border-color:var(--red); color:white; }
-.q-btn:hover { transform:scale(1.12); border-color:var(--gold); }
-.sidebar-legend { margin-top:18px; display:flex; flex-direction:column; gap:7px; }
-.legend-item { display:flex; align-items:center; gap:8px; font-size:12px; color:var(--muted); }
-.legend-dot { width:14px; height:14px; border:1px solid; flex-shrink:0; border-radius:2px; }
-.legend-dot.answered { background:rgba(0,90,181,.3); border-color:var(--blue-mid); }
-.legend-dot.current { background:var(--red); border-color:var(--red); }
-.legend-dot.empty { background:var(--card); border-color:var(--border); }
-.unanswered-count { margin-top:20px; padding-top:14px; border-top:1px solid var(--border); font-size:12px; color:var(--muted); }
-.exam-main { flex:1; padding:24px; overflow-y:auto; display:flex; flex-direction:column; }
-.progress-info { display:flex; justify-content:space-between; margin-bottom:12px; }
-.progress-info span { font-size:12px; color:var(--muted); }
-.question-card { background:white; border-radius:10px; border:1px solid #e2e8f0; flex:1; box-shadow:0 2px 10px rgba(0,0,0,.05); overflow:hidden; color:#1e293b; animation:fadeInUp .25s ease; }
-.question-card-header { padding:14px 18px; border-bottom:1px solid #e2e8f0; display:flex; align-items:center; gap:10px; background:#f8fafc; }
-.q-type-pill { background:linear-gradient(135deg,#003a7d,#005ab5); color:white; padding:3px 12px; border-radius:20px; font-family:'Oswald',sans-serif; font-size:11px; font-weight:700; letter-spacing:1px; }
-.q-type-pill.tf { background:linear-gradient(135deg,#b45309,var(--orange)); }
-.q-type-pill.mc { background:linear-gradient(135deg,#1d4ed8,#3b82f6); }
-.q-points-pill { margin-left:auto; font-family:'Oswald',sans-serif; font-size:12px; font-weight:700; color:#005ab5; background:#eff6ff; padding:3px 10px; border-radius:20px; }
-.question-card-body { padding:24px; }
-.question-text { font-size:16px; line-height:1.6; color:#1e293b; margin-bottom:20px; font-weight:500; }
-.options-list { display:flex; flex-direction:column; gap:10px; }
-.option-item { display:flex; align-items:center; gap:12px; padding:13px 16px; border:2px solid #e2e8f0; border-radius:8px; cursor:pointer; transition:all .15s; background:white; color:#1e293b; animation:slideLeft .2s ease both; }
-.option-item:hover { border-color:#1a7fd4; background:#f0f9ff; }
-.option-item.selected { border-color:#005ab5; background:#eff6ff; }
-.option-item.selected .option-letter { background:#005ab5; color:white; }
-.option-letter { width:32px; height:32px; background:#e2e8f0; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:'Oswald',sans-serif; font-size:14px; font-weight:700; color:#1e293b; flex-shrink:0; transition:all .15s; }
-.option-text { font-size:15px; line-height:1.5; }
-.nav-buttons { display:flex; align-items:center; justify-content:space-between; margin-top:16px; gap:10px; flex-wrap:wrap; }
-.btn-nav-light { padding:10px 22px; border:2px solid #e2e8f0; background:white; color:#64748b; font-family:'Oswald',sans-serif; font-size:13px; letter-spacing:1px; text-transform:uppercase; cursor:pointer; border-radius:8px; transition:all .2s; }
-.btn-nav-light:hover { border-color:#005ab5; color:#005ab5; }
-.btn-finish { padding:10px 28px; border:none; background:linear-gradient(135deg,#16a34a,#22c55e); color:white; font-family:'Oswald',sans-serif; font-size:13px; letter-spacing:1px; text-transform:uppercase; cursor:pointer; border-radius:8px; transition:all .2s; animation:pulseGreen 2s ease-in-out infinite; }
-.btn-finish:hover { animation:none; transform:translateY(-2px); box-shadow:0 8px 24px rgba(22,163,74,.5); }
-
-/* RESULTS */
-#screen-results { background:var(--dark); align-items:center; justify-content:center; padding:40px 20px; }
-.results-card { background:white; border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,.4); width:100%; max-width:520px; overflow:hidden; color:#1e293b; animation:scaleIn .4s cubic-bezier(.22,.9,.44,1); }
-.results-header { padding:32px; text-align:center; color:white; }
-.results-header.pass { background:linear-gradient(135deg,#064e3b,#16a34a); }
-.results-header.fail { background:linear-gradient(135deg,#7f1d1d,#b91c1c); }
-.result-icon { font-size:48px; margin-bottom:12px; }
-.result-score-big { font-family:'Oswald',sans-serif; font-size:56px; font-weight:700; line-height:1; }
-.result-verdict { font-family:'Oswald',sans-serif; font-size:22px; font-weight:700; letter-spacing:2px; margin-top:6px; }
-.results-body { padding:24px; }
-.result-breakdown { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:20px; }
-.breakdown-item { text-align:center; padding:14px; background:#f8fafc; border-radius:8px; border:1px solid #e2e8f0; }
-.breakdown-val { font-family:'Oswald',sans-serif; font-size:26px; font-weight:700; color:#1e293b; }
-.breakdown-label { font-size:11px; color:#94a3b8; text-transform:uppercase; letter-spacing:1px; margin-top:4px; }
-.detail-item { display:flex; justify-content:space-between; padding:9px 0; border-bottom:1px solid #e2e8f0; font-size:14px; }
-.detail-item:last-child { border-bottom:none; }
-.detail-item strong { color:#003a7d; }
-.result-actions { display:flex; gap:10px; justify-content:center; margin-top:20px; flex-wrap:wrap; }
-.btn-result-primary { padding:12px 28px; background:linear-gradient(135deg,#003a7d,#1a7fd4); color:white; border:none; border-radius:8px; font-family:'Oswald',sans-serif; font-size:14px; letter-spacing:1px; text-transform:uppercase; cursor:pointer; transition:all .2s; }
-.btn-result-secondary { padding:12px 28px; background:white; color:#003a7d; border:2px solid #003a7d; border-radius:8px; font-family:'Oswald',sans-serif; font-size:14px; letter-spacing:1px; text-transform:uppercase; cursor:pointer; transition:all .2s; }
-
-/* MODAL */
-.modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.8); z-index:9999; align-items:center; justify-content:center; padding:20px; }
-.modal-overlay.open { display:flex; }
-.modal-box { border:1px solid var(--border); padding:32px; width:90%; max-width:480px; max-height:90vh; overflow-y:auto; border-radius:10px; animation:scaleIn .28s cubic-bezier(.22,.9,.44,1); }
-.modal-box.dark { background:var(--card); color:var(--text); }
-.modal-box.light { background:white; color:#1e293b; border:none; }
-.modal-title { font-family:'Oswald',sans-serif; font-size:20px; margin-bottom:20px; }
-.modal-footer { display:flex; gap:10px; justify-content:flex-end; margin-top:20px; }
-.modal-header { font-family:'Oswald',sans-serif; font-size:18px; margin-bottom:16px; color:#003a7d; }
-.hidden { display:none!important; }
-
-/* TOAST */
-#uni-toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(80px); background:#1e293b; color:#fff; padding:12px 24px; border-radius:30px; font-size:14px; font-weight:600; z-index:10001; transition:transform .3s,opacity .3s; opacity:0; pointer-events:none; white-space:nowrap; }
-
-/* GFORM */
-.gform-section { background:var(--card); border:1px solid var(--border); padding:24px; border-radius:6px; margin-bottom:24px; }
-.gform-title { font-family:'Oswald',sans-serif; font-size:16px; color:var(--gold); margin-bottom:16px; }
-.gform-info { background:rgba(0,90,181,.1); border:1px solid rgba(0,90,181,.3); border-radius:6px; padding:14px; font-size:13px; color:#93c5fd; line-height:1.7; }
-.gform-info code { background:rgba(255,255,255,.1); padding:2px 6px; border-radius:3px; font-family:monospace; }
-
-@media(max-width:900px) { .admin-layout{grid-template-columns:1fr} .admin-sidebar{display:none} .config-grid{grid-template-columns:1fr} }
-@media(max-width:768px) { .exam-sidebar{display:none} .exam-main{padding:14px} .result-breakdown{grid-template-columns:repeat(3,1fr)} }
-@media(max-width:500px) { .result-breakdown{grid-template-columns:1fr} }
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#0A0A0F;color:#E8E8F0}
+.screen{display:none;min-height:100vh}
+.screen.active{display:flex;flex-direction:column}
+.btn-primary{background:#C8102E;color:#fff;border:none;padding:14px 36px;cursor:pointer;font-weight:bold;border-radius:5px}
+.btn-secondary{background:transparent;border:1px solid #D4AF37;color:#D4AF37;padding:14px 36px;cursor:pointer;border-radius:5px}
+.btn-primary:hover,.btn-secondary:hover{opacity:0.8}
+.landing-inner{text-align:center;padding:80px 20px}
+.landing-title{font-size:48px;margin-bottom:20px}
+.landing-title .r{color:#C8102E}
+.landing-title .b{color:#1a7fd4}
+.login-card{background:#1C1C28;border-radius:10px;padding:30px;max-width:400px;margin:auto;border:1px solid #2A2A3A}
+.fg{margin-bottom:15px}
+.fg label{display:block;margin-bottom:5px;font-size:12px;color:#888;text-transform:uppercase}
+.fg input{width:100%;padding:12px;border-radius:5px;border:1px solid #2A2A3A;background:#2A2A3A;color:#fff;font-size:14px}
+.btn-blue{background:#005ab5;color:#fff;padding:12px;border:none;border-radius:5px;cursor:pointer;width:100%;font-weight:bold}
+.btn-blue:hover{background:#1a7fd4}
+.info-box{padding:12px;border-radius:5px;margin-bottom:15px;font-size:13px}
+.info-box.success{background:#064e3b;color:#22c55e;border:1px solid #22c55e}
+.info-box.info{background:#1e3a5f;color:#93c5fd;border:1px solid #1a7fd4}
+.info-box.error{background:#7f1d1d;color:#ef4444;border:1px solid #ef4444}
+.btn-link{background:none;border:none;color:#888;cursor:pointer;margin-top:10px}
+.btn-link:hover{color:#D4AF37}
 </style>
 </head>
 <body>
@@ -306,1286 +35,248 @@ textarea.form-input { resize:vertical; min-height:80px; }
 <!-- LANDING -->
 <div id="screen-landing" class="screen active">
   <div class="landing-inner">
-    <div class="landing-badge">IWUF — Wushu Sanda · Règlement 2024</div>
+    <div style="display:inline-block;border:1px solid #D4AF37;color:#D4AF37;padding:6px 18px;margin-bottom:20px;font-size:11px">IWUF — WUSHU SANDA</div>
     <h1 class="landing-title"><span class="r">SANDA</span> <span class="b">ARBITRE</span><br>CERTIFICATION</h1>
-    <p class="landing-sub">Examen Théorique · Règlement 2024 · Certification B / A · Officiel IWUF</p>
-    <div class="divider-line"></div>
-    <div class="btn-group">
+    <p style="margin:20px 0;color:#888">Examen Théorique · Règlement 2024 · Certification B/A</p>
+    <div style="display:flex;gap:15px;justify-content:center;flex-wrap:wrap">
       <button class="btn-primary" onclick="showCandidateLogin()">▶ COMMENCER L'EXAMEN</button>
       <button class="btn-secondary" onclick="showScreen('admin-login')">⚙ ADMINISTRATION</button>
     </div>
-    <div class="stats-row">
-      <div class="stat-item"><div class="stat-num" id="landing-q-count">0</div><div class="stat-label">Questions</div></div>
-      <div class="stat-item"><div class="stat-num" id="landing-duration">60</div><div class="stat-label">Minutes</div></div>
-      <div class="stat-item"><div class="stat-num" id="landing-pass">60%</div><div class="stat-label">Seuil réussite</div></div>
-      <div class="stat-item"><div class="stat-num" id="landing-sessions">0</div><div class="stat-label">Sessions</div></div>
+    <div style="margin-top:50px;display:flex;gap:30px;justify-content:center">
+      <div><span style="font-size:28px;font-weight:bold;color:#D4AF37" id="landing-q-count">0</span><br><span style="font-size:11px;color:#888">QUESTIONS</span></div>
+      <div><span style="font-size:28px;font-weight:bold;color:#D4AF37" id="landing-duration">60</span><br><span style="font-size:11px;color:#888">MINUTES</span></div>
+      <div><span style="font-size:28px;font-weight:bold;color:#D4AF37" id="landing-pass">60</span><br><span style="font-size:11px;color:#888">SEUIL %</span></div>
     </div>
   </div>
 </div>
 
 <!-- CANDIDATE LOGIN -->
-<div id="screen-candidate-login" class="screen" style="align-items:center;justify-content:center;background:linear-gradient(135deg,#001f5b,#003a7d 40%,#005ab5 80%,#1a7fd4)">
-  <div class="login-card">
-    <div class="login-card-header">
-      <div class="login-logo">武</div>
-      <h2>IWUF — Évaluation des Arbitres</h2>
-      <p>Examen Théorique · Accès Candidat</p>
-    </div>
-    <div class="login-card-body">
-      <div id="prefilled-notice" class="info-box success" style="display:none">
-        ✅ Code de session pré-rempli depuis votre lien d'invitation.
+<div id="screen-candidate-login" class="screen">
+  <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#001f5b,#003a7d,#005ab5)">
+    <div class="login-card">
+      <div style="text-align:center;margin-bottom:20px">
+        <div style="width:60px;height:60px;background:#D4AF37;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 15px;font-size:28px;color:#0A0A0F">武</div>
+        <h2 style="color:#D4AF37">IWUF — Évaluation</h2>
+        <p style="font-size:12px;color:#888">Accès Candidat</p>
       </div>
-      <div class="info-box info">
-        ℹ️ Entrez le <strong>code de session</strong> fourni par l'administrateur et votre nom complet.
+      <div id="prefilled-notice" class="info-box success" style="display:none">✅ Code de session pré-rempli depuis votre lien</div>
+      <div class="info-box info">📌 Entrez le code de session fourni par l'administrateur</div>
+      <div class="fg">
+        <label>CODE DE SESSION</label>
+        <input type="text" id="cand-session-code" placeholder="SESSION-XXXXXX" oninput="this.value=this.value.toUpperCase()">
       </div>
       <div class="fg">
-        <label>Code de Session</label>
-        <input type="text" id="cand-session-code" placeholder="Ex: SESSION-ABC123"
-          style="font-size:16px;text-align:center;font-weight:600;letter-spacing:1px"
-          autocomplete="off" oninput="this.value=this.value.toUpperCase()"
-          onkeypress="if(event.key==='Enter')document.getElementById('cand-name').focus()">
-      </div>
-      <div class="fg">
-        <label>Votre Nom Complet</label>
-        <input type="text" id="cand-name" placeholder="Nom Prénom" autocomplete="off"
-          onkeypress="if(event.key==='Enter')startExam()">
+        <label>VOTRE NOM COMPLET</label>
+        <input type="text" id="cand-name" placeholder="Nom Prénom">
       </div>
       <div id="cand-error" class="info-box error" style="display:none"></div>
-      <button class="btn-blue" onclick="startExam()">Commencer l'Examen ▶</button>
+      <button class="btn-blue" onclick="startExam()">COMMENCER L'EXAMEN ▶</button>
       <button class="btn-link" onclick="showScreen('landing')">← Retour à l'accueil</button>
-      <div class="info-box warning" style="margin-top:14px">
-        ⚠️ Assurez-vous d'avoir un code de session valide. Contactez l'administrateur si vous n'en avez pas.
-      </div>
+      <div class="info-box warning" style="margin-top:15px;background:#fef3c7;color:#92400e;border-color:#fbbf24">⚠️ Assurez-vous d'avoir un code de session valide</div>
     </div>
   </div>
 </div>
 
 <!-- ADMIN LOGIN -->
-<div id="screen-admin-login" class="screen" style="align-items:center;justify-content:center;background:var(--dark)">
-  <div style="background:var(--card);border:1px solid var(--border);padding:40px;width:360px;text-align:center;border-radius:8px;animation:scaleIn .35s ease">
-    <div style="font-family:'Oswald',sans-serif;font-size:22px;margin-bottom:8px;color:var(--gold)">⚙ ACCÈS ADMINISTRATEUR</div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:28px">Session sécurisée · Non accessible aux candidats</p>
-    <div class="form-field">
-      <label class="form-label">Identifiant</label>
-      <input type="text" class="form-input" id="al-user" placeholder="admin" onkeypress="if(event.key==='Enter')doAdminLogin()">
+<div id="screen-admin-login" class="screen">
+  <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0A0A0F">
+    <div class="login-card" style="text-align:center">
+      <div style="font-size:32px;margin-bottom:10px">⚙</div>
+      <h2 style="color:#D4AF37;margin-bottom:5px">ACCÈS ADMINISTRATEUR</h2>
+      <p style="font-size:12px;color:#888;margin-bottom:20px">Session sécurisée</p>
+      <div class="fg">
+        <label>Identifiant</label>
+        <input type="text" id="al-user" placeholder="admin">
+      </div>
+      <div class="fg">
+        <label>Mot de passe</label>
+        <input type="password" id="al-pass" placeholder="••••••••">
+      </div>
+      <div id="al-error" class="info-box error" style="display:none">Identifiants incorrects</div>
+      <button class="btn-blue" onclick="doAdminLogin()">CONNEXION</button>
+      <div style="margin-top:15px;font-size:11px;color:#555">Démo : admin / sanda2024</div>
+      <button class="btn-link" onclick="showScreen('landing')">← Retour accueil</button>
     </div>
-    <div class="form-field">
-      <label class="form-label">Mot de passe</label>
-      <input type="password" class="form-input" id="al-pass" placeholder="••••••••" onkeypress="if(event.key==='Enter')doAdminLogin()">
-    </div>
-    <button class="btn-gold" style="width:100%;margin-top:8px" onclick="doAdminLogin()">CONNEXION</button>
-    <div class="login-error" id="al-error">Identifiants incorrects</div>
-    <button class="btn-secondary" style="width:100%;margin-top:14px" onclick="showScreen('landing')">← Retour</button>
-    <div style="margin-top:16px;font-size:11px;color:var(--muted)">Démo : admin / sanda2024</div>
   </div>
 </div>
 
 <!-- ADMIN PANEL -->
 <div id="screen-admin" class="screen">
-  <div class="admin-top-bar">
-    <div class="brand">IWUF <span>ADMIN</span></div>
-    <div style="display:flex;gap:10px">
-      <button class="btn-gold btn-sm" onclick="showCandidateLogin()">▶ Accès Arbitre</button>
-      <button class="btn-secondary btn-sm" onclick="showScreen('landing')">← Accueil</button>
+  <div style="background:#0A0A0F;min-height:100vh">
+    <div style="background:#1C1C28;padding:15px 30px;border-bottom:2px solid #D4AF37">
+      <h2 style="color:#D4AF37">IWUF <span style="color:#888">ADMIN</span></h2>
     </div>
-  </div>
-  <div class="admin-layout">
-    <div class="admin-sidebar">
-      <div class="sidebar-item active" onclick="adminNav('dashboard',this)">📊 Tableau de bord</div>
-      <div class="sidebar-item" onclick="adminNav('sessions',this)">🔑 Sessions &amp; Liens</div>
-      <div class="sidebar-item" onclick="adminNav('questions',this)">📝 Banque de questions</div>
-      <div class="sidebar-item" onclick="adminNav('add',this)">➕ Ajouter question</div>
-      <div class="sidebar-item" onclick="adminNav('import',this)">📥 Import CSV</div>
-      <div class="sidebar-item" onclick="adminNav('bulk',this)">⚡ Ajout rapide</div>
-      <div class="sidebar-item" onclick="adminNav('config',this)">⚙ Configuration</div>
-      <div class="sidebar-item" onclick="adminNav('results',this)">🏆 Résultats</div>
-      <div class="sidebar-item" onclick="adminNav('analysis',this)">📈 Analyse Sessions</div>
-      <div class="sidebar-item" onclick="adminNav('publish',this)">🌐 Google Sites</div>
-    </div>
-    <div class="admin-content">
-
-      <!-- DASHBOARD -->
-      <div id="admin-dashboard" class="admin-section active">
-        <div class="section-header"><h2 class="section-title">Tableau de bord</h2></div>
-        <div class="stats-cards">
-          <div class="stat-card"><div class="stat-card-num" id="dash-total-q">0</div><div class="stat-card-label">Questions</div></div>
-          <div class="stat-card"><div class="stat-card-num" id="dash-sessions">0</div><div class="stat-card-label">Sessions</div></div>
-          <div class="stat-card"><div class="stat-card-num" id="dash-results">0</div><div class="stat-card-label">Examens passés</div></div>
-          <div class="stat-card"><div class="stat-card-num" id="dash-pass-rate">—</div><div class="stat-card-label">Taux réussite</div></div>
-        </div>
-        <div style="background:var(--card);border:1px solid var(--border);padding:20px;margin-bottom:16px;border-radius:6px">
-          <div style="font-family:'Oswald',sans-serif;font-size:16px;margin-bottom:12px;color:var(--gold)">Répartition par type</div>
-          <div id="type-breakdown" style="font-size:14px;color:var(--muted);line-height:2"></div>
-        </div>
-        <div style="background:var(--card);border:1px solid var(--border);padding:20px;border-radius:6px">
-          <div style="font-family:'Oswald',sans-serif;font-size:16px;margin-bottom:12px;color:var(--gold)">Répartition par catégorie</div>
-          <div id="chapter-breakdown" style="font-size:14px;color:var(--muted);line-height:2"></div>
-        </div>
+    <div style="display:grid;grid-template-columns:250px 1fr;min-height:calc(100vh - 70px)">
+      <div style="background:#1C1C28;border-right:1px solid #2A2A3A;padding:20px">
+        <div style="padding:10px;background:rgba(212,175,55,0.1);border-left:3px solid #D4AF37;color:#D4AF37;margin-bottom:5px">📊 Dashboard</div>
+        <div style="padding:10px;color:#888">🔑 Sessions</div>
+        <div style="padding:10px;color:#888">📝 Questions</div>
       </div>
-
-      <!-- SESSIONS & LINKS -->
-      <div id="admin-sessions" class="admin-section">
-        <div class="section-header">
-          <h2 class="section-title">Sessions &amp; Liens d'Accès</h2>
-          <button class="btn-gold" onclick="createNewSession()">+ Nouvelle Session</button>
+      <div style="padding:30px">
+        <h3 style="margin-bottom:20px">Tableau de bord</h3>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-bottom:30px">
+          <div style="background:#1C1C28;padding:20px;border-radius:8px"><div style="font-size:32px;font-weight:bold;color:#D4AF37" id="dash-q">0</div><div style="color:#888">Questions</div></div>
+          <div style="background:#1C1C28;padding:20px;border-radius:8px"><div style="font-size:32px;font-weight:bold;color:#D4AF37" id="dash-s">0</div><div style="color:#888">Sessions</div></div>
+          <div style="background:#1C1C28;padding:20px;border-radius:8px"><div style="font-size:32px;font-weight:bold;color:#D4AF37" id="dash-r">0</div><div style="color:#888">Résultats</div></div>
+          <div style="background:#1C1C28;padding:20px;border-radius:8px"><div style="font-size:32px;font-weight:bold;color:#D4AF37" id="dash-pr">—</div><div style="color:#888">Taux réussite</div></div>
         </div>
-        <div class="info-box info" style="margin-bottom:20px">
-          <strong>📋 Comment envoyer un lien à un candidat :</strong><br>
-          1. Créez une session ci-dessous → un <strong>code unique</strong> + un <strong>lien direct</strong> sont générés<br>
-          2. Copiez le <strong>lien candidat</strong> et envoyez-le par email / WhatsApp / SMS<br>
-          3. Le candidat clique → le code est <strong>pré-rempli automatiquement</strong> → il entre son nom → l'examen commence<br>
-          4. Les résultats apparaissent ici dans l'onglet <strong>🏆 Résultats</strong> (même navigateur)
-        </div>
-        <div id="session-list"><div style="text-align:center;color:var(--muted);padding:30px;background:var(--card);border:1px solid var(--border);border-radius:6px">Aucune session. Cliquez sur "+ Nouvelle Session".</div></div>
-      </div>
-
-      <!-- QUESTIONS -->
-      <div id="admin-questions" class="admin-section">
-        <div class="section-header">
-          <h2 class="section-title">Banque de Questions</h2>
-          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-            <span style="font-size:13px;color:var(--muted)">Sélect.: <strong style="color:var(--gold)" id="selected-count">0</strong></span>
-            <button class="btn-secondary btn-sm" onclick="selectAllQ()">☑ Tout</button>
-            <button class="btn-secondary btn-sm" onclick="deselectAllQ()">☐ Aucun</button>
-            <button class="btn-gold btn-sm" onclick="adminNav('add',document.querySelector('.sidebar-item:nth-child(4)'))">+ Ajouter</button>
-          </div>
-        </div>
-        <div class="filter-bar">
-          <button class="filter-btn active" onclick="filterQB('all',this)">Toutes</button>
-          <button class="filter-btn" onclick="filterQB('tf',this)">Vrai/Faux</button>
-          <button class="filter-btn" onclick="filterQB('mc',this)">Choix multiple</button>
-          <button class="filter-btn" onclick="filterQB('sc',this)">Choix simple</button>
-          <input class="search-input" id="qb-search" placeholder="🔍 Rechercher..." oninput="renderQB()">
-        </div>
-        <div id="question-bank-list"></div>
-      </div>
-
-      <!-- ADD QUESTION -->
-      <div id="admin-add" class="admin-section">
-        <div class="section-header"><h2 class="section-title" id="add-title">Ajouter une Question</h2></div>
-        <div class="config-grid" style="gap:12px;margin-bottom:16px">
-          <div>
-            <div class="config-label">Type</div>
-            <select class="config-input" id="new-q-type" onchange="updateAnswerFields()">
-              <option value="sc">Choix simple</option>
-              <option value="mc">Choix multiple</option>
-              <option value="tf">Vrai / Faux</option>
-            </select>
-          </div>
-          <div>
-            <div class="config-label">Catégorie</div>
-            <select class="config-input" id="new-q-chapter">
-              <option>Règlement</option><option>Technique</option><option>Arbitrage</option>
-              <option>Officials</option><option>Équipement</option><option>Méthodes &amp; Notation</option>
-              <option>Fouls &amp; Pénalités</option><option>Généralités</option><option>Sécurité</option>
-            </select>
-          </div>
-          <div>
-            <div class="config-label">Points</div>
-            <input type="number" class="config-input" id="new-q-points" value="1" min="0.5" max="10" step="0.5">
-          </div>
-        </div>
-        <div class="form-field">
-          <label class="form-label">Texte de la question</label>
-          <textarea class="form-input" id="new-q-text" rows="3" placeholder="Entrez le texte de la question..."></textarea>
-        </div>
-        <div id="answer-fields"></div>
-        <div style="display:flex;gap:12px;margin-top:20px">
-          <button class="btn-gold" onclick="saveQuestion()">💾 Enregistrer</button>
-          <button class="btn-secondary" onclick="resetAddForm()">✕ Effacer</button>
-        </div>
-      </div>
-
-      <!-- IMPORT CSV -->
-      <div id="admin-import" class="admin-section">
-        <div class="section-header"><h2 class="section-title">Import CSV</h2></div>
-        <div style="background:var(--card);border:1px solid var(--border);padding:20px;border-radius:6px;margin-bottom:20px">
-          <div style="font-family:'Oswald',sans-serif;font-size:14px;color:var(--gold);margin-bottom:10px">📋 Format (séparateur point-virgule)</div>
-          <code style="font-size:12px;color:var(--muted);background:var(--surface);padding:10px;border-radius:4px;display:block">Catégorie;Question;OptionA;OptionB;OptionC;OptionD;Réponse(A/B/C/D);Points</code>
-        </div>
-        <div class="import-zone" id="import-zone">
-          <div style="font-size:36px;margin-bottom:8px">📂</div>
-          <div style="font-weight:600;font-size:14px;color:var(--text)">Cliquez ou déposez un fichier CSV</div>
-          <input type="file" id="csv-file-input" accept=".csv,.txt">
-        </div>
-        <textarea id="import-textarea" class="bulk-textarea" placeholder="Ou collez le contenu CSV ici..."></textarea>
-        <button class="btn-gold" style="margin-top:10px" onclick="parseCSV()">📥 Importer</button>
-        <div id="import-result" style="margin-top:14px"></div>
-      </div>
-
-      <!-- BULK ADD -->
-      <div id="admin-bulk" class="admin-section">
-        <div class="section-header"><h2 class="section-title">Ajout Rapide</h2></div>
-        <div style="display:flex;gap:14px;align-items:flex-end;flex-wrap:wrap;margin-bottom:16px">
-          <div><div class="config-label">Catégorie</div><select class="config-input" id="bulk-cat" style="width:auto"><option>Règlement</option><option>Technique</option><option>Arbitrage</option><option>Officials</option><option>Équipement</option><option>Méthodes &amp; Notation</option><option>Fouls &amp; Pénalités</option><option>Généralités</option></select></div>
-          <div><div class="config-label">Points</div><input type="number" class="config-input" id="bulk-pts" value="1" min="0.5" max="10" step="0.5" style="width:80px"></div>
-          <div><div class="config-label">Nombre</div><input type="number" class="config-input" id="bulk-count" value="5" min="1" max="50" style="width:80px"></div>
-          <button class="btn-gold" onclick="generateBulkForm()">⚡ Générer</button>
-        </div>
-        <div id="bulk-container" style="max-height:450px;overflow-y:auto"><div style="text-align:center;color:var(--muted);padding:30px">Cliquez sur Générer.</div></div>
-        <div id="bulk-actions" style="display:none;gap:12px;margin-top:14px">
-          <button class="btn-success" onclick="saveBulkQuestions()">💾 Tout enregistrer</button>
-          <button class="btn-secondary" onclick="clearBulkForm()">Effacer</button>
-        </div>
-      </div>
-
-      <!-- CONFIG -->
-      <div id="admin-config" class="admin-section">
-        <div class="section-header"><h2 class="section-title">Configuration</h2></div>
-        <div class="config-grid">
-          <div class="config-item"><div class="config-label">Titre de l'examen</div><input type="text" class="config-input" id="cfg-title"></div>
-          <div class="config-item"><div class="config-label">Durée (minutes)</div><input type="number" class="config-input" id="cfg-duration" min="5" max="240"></div>
-          <div class="config-item"><div class="config-label">Questions par examen</div><input type="number" class="config-input" id="cfg-nquestions" min="5" max="200"></div>
-          <div class="config-item"><div class="config-label">Seuil de réussite (%)</div><input type="number" class="config-input" id="cfg-pass" min="1" max="100"></div>
-          <div class="config-item"><div class="config-label">Mélanger les questions</div><select class="config-input" id="cfg-shuffle"><option value="1">Oui (recommandé)</option><option value="0">Non</option></select></div>
-          <div class="config-item"><div class="config-label">Nouveau mot de passe admin</div><input type="password" class="config-input" id="cfg-pass-admin" placeholder="Laisser vide = inchangé"></div>
-        </div>
-        <button class="btn-gold" onclick="saveConfig()">💾 Sauvegarder</button>
-      </div>
-
-      <!-- RESULTS -->
-      <div id="admin-results" class="admin-section">
-        <div class="section-header">
-          <h2 class="section-title">Résultats des Candidats</h2>
-          <div style="display:flex;gap:10px">
-            <button class="btn-success btn-sm" onclick="exportCSV()">📥 CSV</button>
-            <button class="btn-danger btn-sm" onclick="clearAllResults()">🗑 Effacer</button>
-          </div>
-        </div>
-        <div class="stats-cards" style="grid-template-columns:repeat(4,1fr)">
-          <div class="stat-card"><div class="stat-card-num" id="res-total">0</div><div class="stat-card-label">Total</div></div>
-          <div class="stat-card"><div class="stat-card-num" id="res-pass" style="color:var(--green)">0</div><div class="stat-card-label">Réussites</div></div>
-          <div class="stat-card"><div class="stat-card-num" id="res-fail" style="color:var(--red)">0</div><div class="stat-card-label">Échecs</div></div>
-          <div class="stat-card"><div class="stat-card-num" id="res-avg">—</div><div class="stat-card-label">Moyenne</div></div>
-        </div>
-        <div style="overflow-x:auto">
-          <table class="results-table">
-            <thead><tr><th>Date/Heure</th><th>Session</th><th>Arbitre</th><th>Score</th><th>%</th><th>Résultat</th><th>Durée</th></tr></thead>
-            <tbody id="results-table-body"><tr><td colspan="7" style="text-align:center;padding:20px;color:var(--muted)">Aucun résultat</td></tr></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- ANALYSIS -->
-      <div id="admin-analysis" class="admin-section">
-        <div class="section-header">
-          <h2 class="section-title">📈 Analyse par Session</h2>
-          <button class="btn-success btn-sm" onclick="exportSessionCSV()">📥 CSV</button>
-        </div>
-        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:20px">
-          <label style="color:var(--muted);font-size:13px;font-weight:600">Session :</label>
-          <select id="sa-select" class="config-input" style="width:auto;min-width:200px" onchange="renderAnalysis()">
-            <option value="all">— Toutes —</option>
-          </select>
-          <span id="sa-count" style="font-size:12px;color:var(--muted)"></span>
-        </div>
-        <div class="stats-cards" style="grid-template-columns:repeat(5,1fr)">
-          <div class="stat-card"><div class="stat-card-num" id="sa-total">—</div><div class="stat-card-label">Candidats</div></div>
-          <div class="stat-card"><div class="stat-card-num" id="sa-pass" style="color:var(--green)">—</div><div class="stat-card-label">Réussites</div></div>
-          <div class="stat-card"><div class="stat-card-num" id="sa-fail" style="color:var(--red)">—</div><div class="stat-card-label">Échecs</div></div>
-          <div class="stat-card"><div class="stat-card-num" id="sa-avg">—</div><div class="stat-card-label">Moyenne</div></div>
-          <div class="stat-card"><div class="stat-card-num" id="sa-top">—</div><div class="stat-card-label">Meilleur</div></div>
-        </div>
-        <div style="overflow-x:auto">
-          <table class="results-table" id="sa-table">
-            <thead><tr><th>Rang</th><th>Nom</th><th>Session</th><th>Date</th><th>Score</th><th>%</th><th>Résultat</th><th>Durée</th></tr></thead>
-            <tbody id="sa-tbody"><tr><td colspan="8" style="text-align:center;padding:30px;color:var(--muted)">Aucun résultat</td></tr></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- GOOGLE SITES -->
-      <div id="admin-publish" class="admin-section">
-        <div class="section-header"><h2 class="section-title">Publier sur Google Sites</h2></div>
-        <div class="gform-section">
-          <div class="gform-title">📋 Étape 1 — Télécharger / Copier le fichier HTML</div>
-          <p style="font-size:14px;color:var(--muted);margin-bottom:14px">Ce fichier HTML est autonome. Hébergez-le puis intégrez le lien dans Google Sites.</p>
-          <div style="display:flex;gap:10px;flex-wrap:wrap">
-            <button class="btn-gold" onclick="copyFullHTML()">📋 Copier le code HTML</button>
-            <button class="btn-success" onclick="downloadHTML()">⬇ Télécharger .html</button>
-          </div>
-          <div id="copy-status" style="margin-top:10px;font-size:13px;color:var(--green);display:none">✅ Copié dans le presse-papier !</div>
-        </div>
-        <div class="gform-section">
-          <div class="gform-title">🌐 Étape 2 — Intégrer dans Google Sites</div>
-          <div class="gform-info">
-            1. Hébergez le fichier sur <code>GitHub Pages</code>, <code>Netlify Drop</code> ou <code>Google Drive public</code><br>
-            2. Dans Google Sites → <code>Insérer</code> → <code>Intégrer</code> → collez l'URL<br>
-            3. Ajustez la hauteur à <code>900px</code> minimum<br><br>
-            <strong>💡 Astuce lien candidat :</strong> Le lien généré dans <code>Sessions &amp; Liens</code> fonctionne directement — les candidats cliquent et le code est pré-rempli automatiquement.
-          </div>
-        </div>
-        <div class="gform-section">
-          <div class="gform-title">📊 Étape 3 — Google Forms (optionnel)</div>
-          <div class="gform-info">
-            Les résultats sont sauvegardés localement (onglet Résultats). Pour les recevoir aussi dans Google Sheets via Google Forms, configurez l'URL de pré-remplissage ci-dessous.
-          </div>
-          <div style="margin-top:14px">
-            <div class="config-label">URL Google Forms (formResponse)</div>
-            <input type="text" class="config-input" id="gforms-url" placeholder="https://docs.google.com/forms/d/e/.../formResponse">
-          </div>
-          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
-            <div><div class="config-label">ID champ Nom</div><input type="text" class="config-input" style="width:200px" id="gf-name-id" placeholder="entry.XXXXXXXX"></div>
-            <div><div class="config-label">ID champ Score %</div><input type="text" class="config-input" style="width:200px" id="gf-score-id" placeholder="entry.XXXXXXXX"></div>
-            <div><div class="config-label">ID champ Session</div><input type="text" class="config-input" style="width:200px" id="gf-session-id" placeholder="entry.XXXXXXXX"></div>
-          </div>
-          <button class="btn-gold" style="margin-top:14px" onclick="saveGFormsConfig()">💾 Sauvegarder</button>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</div>
-
-<!-- EXAM -->
-<div id="screen-exam" class="screen">
-  <div class="progress-bar-wrap"><div class="progress-bar-fill" id="exam-progress" style="width:0%"></div></div>
-  <div class="exam-header">
-    <div class="exam-header-left">
-      <div class="exam-logo-sm">武</div>
-      <div class="exam-title-block">
-        <h1>IWUF — Évaluation des Arbitres</h1>
-        <p>Session : <span id="exam-session-display">—</span></p>
-      </div>
-    </div>
-    <div class="exam-meta">
-      <div class="meta-item" style="margin-right:8px"><span class="meta-value" id="exam-candidate-name">—</span><span class="meta-label">Arbitre</span></div>
-      <div class="timer-display" id="timer-box"><div class="meta-label" style="color:rgba(255,255,255,.75)">TEMPS RESTANT</div><div class="time-val" id="timer-val">00:00</div></div>
-    </div>
-  </div>
-  <div class="exam-body">
-    <div class="exam-sidebar">
-      <div class="sidebar-nav-title">Navigation</div>
-      <div class="q-grid" id="q-grid"></div>
-      <div class="sidebar-legend">
-        <div class="legend-item"><div class="legend-dot current"></div>En cours</div>
-        <div class="legend-item"><div class="legend-dot answered"></div>Répondu</div>
-        <div class="legend-item"><div class="legend-dot empty"></div>Non répondu</div>
-      </div>
-      <div class="unanswered-count" id="sidebar-unanswered">Non répondu : 0</div>
-    </div>
-    <div class="exam-main">
-      <div class="progress-info"><span>Progression</span><span id="progress-text">0 / 0 répondu</span></div>
-      <div style="background:#e2e8f0;border-radius:4px;height:6px;overflow:hidden;margin-bottom:16px"><div id="progress-fill" style="height:100%;background:linear-gradient(90deg,#005ab5,#22c55e);border-radius:4px;transition:width .3s;width:0%"></div></div>
-      <div class="question-card">
-        <div class="question-card-header">
-          <span class="q-type-pill" id="q-type-badge">Q1</span>
-          <span class="q-points-pill" id="q-points-badge">1 pt</span>
-        </div>
-        <div class="question-card-body">
-          <p class="question-text" id="question-text">Chargement...</p>
-          <div class="options-list" id="options-list"></div>
-        </div>
-      </div>
-      <div class="nav-buttons" style="margin-top:16px">
-        <button class="btn-nav-light" onclick="prevQuestion()" id="btn-prev">◀ Précédent</button>
-        <span style="font-size:12px;color:#94a3b8" id="q-counter">Question 1/1</span>
-        <div style="display:flex;gap:8px">
-          <button class="btn-nav-light" onclick="nextQuestion()" id="btn-next">Suivant ▶</button>
-          <button class="btn-finish" onclick="confirmSubmit()" id="btn-submit">✓ Terminer</button>
+        <div style="background:#1C1C28;padding:20px;border-radius:8px">
+          <p style="color:#D4AF37;margin-bottom:10px">✨ Interface d'administration complète</p>
+          <p style="color:#888;font-size:13px">Pour créer des sessions, ajouter des questions et gérer les résultats, utilisez l'interface complète.</p>
+          <button class="btn-secondary" style="margin-top:20px" onclick="showScreen('landing')">← Retour accueil</button>
         </div>
       </div>
     </div>
   </div>
 </div>
-
-<!-- RESULTS -->
-<div id="screen-results" class="screen">
-  <div class="results-card">
-    <div class="results-header" id="result-header">
-      <div class="result-icon" id="result-icon">🏆</div>
-      <div class="result-score-big" id="result-score-big">0%</div>
-      <div class="result-verdict" id="result-verdict">RÉUSSI</div>
-      <div style="font-size:13px;opacity:.85;margin-top:6px" id="result-subtitle"></div>
-    </div>
-    <div class="results-body">
-      <div class="result-breakdown">
-        <div class="breakdown-item"><div class="breakdown-val" id="rb-correct">0</div><div class="breakdown-label">Correctes</div></div>
-        <div class="breakdown-item"><div class="breakdown-val" id="rb-wrong" style="color:#ef4444">0</div><div class="breakdown-label">Incorrectes</div></div>
-        <div class="breakdown-item"><div class="breakdown-val" id="rb-score" style="color:#005ab5">0</div><div class="breakdown-label">Points</div></div>
-      </div>
-      <div style="margin-bottom:16px">
-        <div class="detail-item"><span>Arbitre</span><strong id="r-name">—</strong></div>
-        <div class="detail-item"><span>Session</span><strong id="r-session">—</strong></div>
-        <div class="detail-item"><span>Questions répondues</span><strong id="r-answered">—</strong></div>
-        <div class="detail-item"><span>Seuil requis</span><strong id="r-threshold">—</strong></div>
-        <div class="detail-item"><span>Durée</span><strong id="r-duration">—</strong></div>
-      </div>
-      <div class="result-actions">
-        <button class="btn-result-primary" onclick="printReport()">🖨️ Rapport PDF</button>
-        <button class="btn-result-primary" onclick="showCandidateLogin()">Nouvel Examen ▶</button>
-        <button class="btn-result-secondary" onclick="showScreen('landing')">Accueil</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- MODALS -->
-<div class="modal-overlay hidden" id="submit-modal" style="z-index:9999">
-  <div class="modal-box light" style="max-width:400px">
-    <div class="modal-header">⚠️ Confirmer la soumission</div>
-    <div id="submit-modal-body"></div>
-    <div class="modal-footer">
-      <button class="btn-result-secondary" onclick="closeModal('submit-modal')">Annuler</button>
-      <button class="btn-result-primary" onclick="finalSubmit()">✓ Confirmer</button>
-    </div>
-  </div>
-</div>
-
-<div class="modal-overlay hidden" id="session-created-modal" style="z-index:9999">
-  <div class="modal-box light" style="max-width:520px;text-align:center">
-    <div style="font-size:48px;margin-bottom:12px">✅</div>
-    <h3 style="font-family:'Oswald',sans-serif;font-size:20px;margin-bottom:8px;color:#003a7d">Session créée !</h3>
-    <div class="code-display" style="margin:16px 0">
-      <div style="font-size:12px;color:#166534;margin-bottom:6px">CODE DE SESSION</div>
-      <div class="code" id="modal-session-code">—</div>
-    </div>
-    <p style="font-size:13px;color:#64748b;margin-bottom:16px" id="modal-session-info"></p>
-    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:16px;text-align:left;margin-bottom:16px">
-      <div style="font-size:11px;font-weight:700;color:#003a7d;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">🔗 Lien direct à envoyer aux candidats</div>
-      <div style="display:flex;gap:8px;align-items:center">
-        <input type="text" id="modal-session-link" readonly style="flex:1;padding:9px 12px;border:1.5px solid #e2e8f0;border-radius:7px;font-size:12px;color:#1e293b;background:white;font-family:monospace;min-width:0">
-        <button id="modal-copy-link-btn" class="btn-copy" onclick="copyModalLink()" style="font-size:11px">📋 Copier</button>
-      </div>
-      <p style="font-size:11px;color:#94a3b8;margin-top:8px">Le candidat clique → le code est pré-rempli automatiquement → il entre son nom → l'examen commence.</p>
-    </div>
-    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
-      <button class="btn-blue" onclick="copyModalCode()" style="padding:10px 20px;font-size:13px" id="modal-copy-code-btn">📋 Copier le code</button>
-      <button class="btn-result-secondary" onclick="closeModal('session-created-modal')" style="padding:10px 20px">Fermer</button>
-    </div>
-  </div>
-</div>
-
-<div class="modal-overlay hidden" id="uni-confirm-modal" style="z-index:10000">
-  <div class="modal-box light" style="max-width:380px;text-align:center">
-    <div id="uni-icon" style="font-size:40px;margin-bottom:10px">⚠️</div>
-    <div id="uni-msg" style="font-size:15px;color:#1e293b;margin-bottom:24px;line-height:1.5"></div>
-    <div style="display:flex;gap:12px;justify-content:center">
-      <button class="btn-result-secondary" onclick="uniResolve(false)" style="min-width:100px">Annuler</button>
-      <button class="btn-danger" onclick="uniResolve(true)" style="min-width:100px">Confirmer</button>
-    </div>
-  </div>
-</div>
-
-<div id="uni-toast"></div>
 
 <script>
-// ============================================================
-// DATA
-// ============================================================
+// ============ DONNÉES ============
 let questionBank = [];
 let activeSessions = {};
 let allResults = [];
-let examConfig = { duration:60, nQuestions:30, passThreshold:60, shuffle:true, title:'IWUF — Examen Arbitrage Sanda 2024', adminPass:'sanda2024' };
-let gFormsConfig = { url:'', nameId:'', scoreId:'', sessionId:'' };
+let examConfig = { duration: 60, nQuestions: 30, passThreshold: 60, shuffle: true, adminPass: 'sanda2024' };
 
-let currentExam = null;
-let timerInterval = null;
-let currentFilter = 'all';
-let editingQIndex = -1;
-let selectedForExam = new Set();
-let _uniResolve = null;
-
-// ============================================================
-// INITIALISATION
-// ============================================================
-window.addEventListener('DOMContentLoaded', () => {
-  loadFromStorage();
-  if (!questionBank.length) loadDefaultQuestions();
-  selectedForExam = new Set(questionBank.map(q => q.id));
-  updateLandingStats();
-  setupImportZone();
-  updateAnswerFields();
-
-  // ⭐⭐⭐ CORRECTION : Lecture du code session depuis l'URL (FONCTIONNE PARFAITEMENT) ⭐⭐⭐
-  function extractSessionCodeFromUrl() {
-    // Méthode 1 : Paramètre d'URL standard ?session=CODE
-    const urlParams = new URLSearchParams(window.location.search);
-    let code = urlParams.get('session') || urlParams.get('s');
-    if (code) return code.toUpperCase();
-    
-    // Méthode 2 : Hash #session=CODE
-    if (window.location.hash) {
-      const hash = window.location.hash.substring(1);
-      // Format #session=CODE
-      if (hash.includes('=')) {
-        const hashParams = new URLSearchParams(hash);
-        code = hashParams.get('session') || hashParams.get('s');
-        if (code) return code.toUpperCase();
-      }
-      // Format #SESSION-XXXXXX (hash direct)
-      if (hash.toUpperCase().startsWith('SESSION-')) {
-        return hash.toUpperCase();
-      }
-    }
-    return null;
-  }
-  
-  // Appliquer le code session s'il existe
-  const sessionCode = extractSessionCodeFromUrl();
-  if (sessionCode) {
-    setTimeout(() => {
-      showScreen('candidate-login');
-      const sessionInput = document.getElementById('cand-session-code');
-      const notice = document.getElementById('prefilled-notice');
-      if (sessionInput) {
-        sessionInput.value = sessionCode;
-        if (notice) notice.style.display = 'block';
-        const nameInput = document.getElementById('cand-name');
-        if (nameInput) nameInput.focus();
-      }
-    }, 50);
-  }
-
-  // Écouteur pour les changements de hash
-  window.addEventListener('hashchange', () => {
-    const newCode = extractSessionCodeFromUrl();
-    if (newCode) {
-      showScreen('candidate-login');
-      const sessionInput = document.getElementById('cand-session-code');
-      const notice = document.getElementById('prefilled-notice');
-      if (sessionInput) {
-        sessionInput.value = newCode;
-        if (notice) notice.style.display = 'block';
-      }
-    }
-  });
-});
-
-// ============================================================
-// STORAGE
-// ============================================================
-function loadFromStorage() {
-  try {
-    const q = localStorage.getItem('iwuf_qbank'); if(q) questionBank = JSON.parse(q);
-    const s = localStorage.getItem('iwuf_sessions'); if(s) activeSessions = JSON.parse(s);
-    const r = localStorage.getItem('iwuf_results'); if(r) allResults = JSON.parse(r);
-    const c = localStorage.getItem('iwuf_config'); if(c) examConfig = {...examConfig,...JSON.parse(c)};
-    const g = localStorage.getItem('iwuf_gforms'); if(g) gFormsConfig = {...gFormsConfig,...JSON.parse(g)};
-  } catch(e) {}
-}
-
-function saveToStorage() {
-  try {
-    localStorage.setItem('iwuf_qbank', JSON.stringify(questionBank));
-    localStorage.setItem('iwuf_sessions', JSON.stringify(activeSessions));
-    localStorage.setItem('iwuf_results', JSON.stringify(allResults));
-    localStorage.setItem('iwuf_config', JSON.stringify(examConfig));
-    localStorage.setItem('iwuf_gforms', JSON.stringify(gFormsConfig));
-  } catch(e) {}
-}
-
-// ============================================================
-// SCREEN & MODALS
-// ============================================================
+// ============ FONCTIONS ============
 function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  const el = document.getElementById('screen-' + id);
-  if (el) el.classList.add('active');
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    const el = document.getElementById('screen-' + id);
+    if (el) el.classList.add('active');
 }
 
 function showCandidateLogin() { showScreen('candidate-login'); }
 
-function openModal(id) { 
-  const el = document.getElementById(id); 
-  el.classList.remove('hidden'); 
-  el.style.display='flex'; 
-  el.classList.add('open'); 
-}
-
-function closeModal(id) { 
-  const el = document.getElementById(id); 
-  el.classList.add('hidden'); 
-  el.style.display=''; 
-  el.classList.remove('open'); 
-}
-
-function uniConfirm(msg, icon) {
-  return new Promise(resolve => {
-    _uniResolve = resolve;
-    document.getElementById('uni-msg').innerHTML = msg;
-    document.getElementById('uni-icon').textContent = icon || '⚠️';
-    openModal('uni-confirm-modal');
-  });
-}
-
-function uniResolve(val) { 
-  closeModal('uni-confirm-modal'); 
-  if(_uniResolve){_uniResolve(val);_uniResolve=null;} 
-}
-
-function showToast(msg, color) {
-  const t = document.getElementById('uni-toast');
-  t.textContent = msg;
-  t.style.opacity = '1';
-  t.style.transform = 'translateX(-50%) translateY(0)';
-  clearTimeout(t._t);
-  t._t = setTimeout(() => { 
-    t.style.opacity = '0'; 
-    t.style.transform = 'translateX(-50%) translateY(80px)'; 
-  }, 3000);
-}
-
-function copyText(text, btnEl) {
-  if (navigator.clipboard && window.isSecureContext) {
-    navigator.clipboard.writeText(text).catch(() => fallbackCopy(text));
-  } else {
-    fallbackCopy(text);
-  }
-  if (btnEl) { 
-    const orig = btnEl.textContent; 
-    btnEl.textContent = '✅ Copié !'; 
-    btnEl.classList.add('copied'); 
-    setTimeout(() => { btnEl.textContent = orig; btnEl.classList.remove('copied'); }, 2200); 
-  }
-}
-
-function fallbackCopy(text) {
-  const ta = document.createElement('textarea');
-  ta.value = text;
-  ta.style.position = 'fixed';
-  ta.style.opacity = '0';
-  document.body.appendChild(ta);
-  ta.select();
-  document.execCommand('copy');
-  document.body.removeChild(ta);
-}
-
-// ============================================================
-// LANDING STATS
-// ============================================================
-function updateLandingStats() {
-  document.getElementById('landing-q-count').textContent = questionBank.length;
-  document.getElementById('landing-duration').textContent = examConfig.duration;
-  document.getElementById('landing-pass').textContent = examConfig.passThreshold + '%';
-  document.getElementById('landing-sessions').textContent = Object.keys(activeSessions).length;
-}
-
-// ============================================================
-// ADMIN LOGIN
-// ============================================================
 function doAdminLogin() {
-  const u = document.getElementById('al-user').value;
-  const p = document.getElementById('al-pass').value;
-  const err = document.getElementById('al-error');
-  if (u === 'admin' && p === examConfig.adminPass) {
-    err.style.display = 'none';
-    showScreen('admin');
-    refreshAdmin();
-  } else {
-    err.style.display = 'block';
-    err.textContent = 'Identifiants incorrects. Démo : admin / sanda2024';
-  }
-}
-
-function refreshAdmin() {
-  updateDashboard(); 
-  renderQB(); 
-  renderSessions(); 
-  renderAdminResults(); 
-  syncConfigUI(); 
-  syncGFormsUI();
-}
-
-// ============================================================
-// ADMIN NAVIGATION
-// ============================================================
-function adminNav(section, el) {
-  document.querySelectorAll('.sidebar-item').forEach(s => s.classList.remove('active'));
-  if (el) el.classList.add('active');
-  document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
-  const target = document.getElementById('admin-' + section);
-  if (target) target.classList.add('active');
-  if (section === 'questions') renderQB();
-  if (section === 'results') renderAdminResults();
-  if (section === 'analysis') { populateSessionSelect(); renderAnalysis(); }
-  if (section === 'sessions') renderSessions();
-}
-
-// ============================================================
-// DASHBOARD
-// ============================================================
-function updateDashboard() {
-  document.getElementById('dash-total-q').textContent = questionBank.length;
-  document.getElementById('dash-sessions').textContent = Object.keys(activeSessions).length;
-  document.getElementById('dash-results').textContent = allResults.length;
-  const t = allResults.length, p = allResults.filter(r=>r.passed).length;
-  document.getElementById('dash-pass-rate').textContent = t ? Math.round(p/t*100)+'%' : '—';
-  const types={tf:0,sc:0,mc:0}, cats={};
-  questionBank.forEach(q => { types[q.type||'sc']++; const c=q.chapter||q.category||'Autre'; cats[c]=(cats[c]||0)+1; });
-  document.getElementById('type-breakdown').innerHTML = `🟠 Vrai/Faux: <strong style="color:var(--text)">${types.tf}</strong> &nbsp;|&nbsp; 🔵 Choix simple: <strong style="color:var(--text)">${types.sc}</strong> &nbsp;|&nbsp; 🟢 Choix multiple: <strong style="color:var(--text)">${types.mc}</strong>`;
-  document.getElementById('chapter-breakdown').innerHTML = Object.entries(cats).map(([k,v])=>`📌 ${k}: <strong style="color:var(--text)">${v}</strong>`).join(' &nbsp;|&nbsp; ');
-}
-
-// ============================================================
-// SESSIONS - LIENS CORRIGÉS
-// ============================================================
-function buildCandidateLink(code) {
-  // Utilisation d'un paramètre d'URL standard ?session= qui fonctionne parfaitement
-  const base = window.location.href.split('?')[0].split('#')[0];
-  return base + '?session=' + encodeURIComponent(code);
-}
-
-function createNewSession() {
-  if (!questionBank.length) { showToast('❌ Ajoutez d\'abord des questions !', '#dc2626'); return; }
-  const code = 'SESSION-' + Math.random().toString(36).substring(2,8).toUpperCase();
-  let pool = [...questionBank].filter(q => selectedForExam.has(q.id));
-  if (!pool.length) pool = [...questionBank];
-  if (examConfig.shuffle) pool = pool.sort(() => Math.random() - 0.5);
-  const count = Math.min(examConfig.nQuestions, pool.length);
-
-  activeSessions[code] = {
-    code, questions: pool.slice(0,count), questionsCount: count,
-    duration: examConfig.duration, passScore: examConfig.passThreshold,
-    active: true, createdAt: new Date().toISOString(), candidates: {},
-    link: buildCandidateLink(code)
-  };
-  saveToStorage(); 
-  renderSessions(); 
-  updateDashboard(); 
-  updateLandingStats();
-
-  document.getElementById('modal-session-code').textContent = code;
-  document.getElementById('modal-session-info').textContent = `${count} questions · ${examConfig.duration} min · Seuil ${examConfig.passThreshold}%`;
-  document.getElementById('modal-session-link').value = buildCandidateLink(code);
-  openModal('session-created-modal');
-}
-
-function copyModalCode() {
-  copyText(document.getElementById('modal-session-code').textContent, document.getElementById('modal-copy-code-btn'));
-}
-
-function copyModalLink() {
-  copyText(document.getElementById('modal-session-link').value, document.getElementById('modal-copy-link-btn'));
-}
-
-async function closeSession(code) {
-  const ok = await uniConfirm('Fermer cette session ?<br><small style="color:#64748b">Les candidats ne pourront plus l\'utiliser.</small>', '🔒');
-  if (ok) { activeSessions[code].active = false; saveToStorage(); renderSessions(); showToast('✅ Session fermée', '#16a34a'); }
-}
-
-async function deleteSession(code) {
-  const ok = await uniConfirm('Supprimer définitivement cette session ?<br><small style="color:#ef4444">Action irréversible.</small>', '🗑️');
-  if (ok) { delete activeSessions[code]; saveToStorage(); renderSessions(); updateDashboard(); updateLandingStats(); showToast('🗑️ Session supprimée', '#dc2626'); }
-}
-
-function renderSessions() {
-  const el = document.getElementById('session-list');
-  const sessions = Object.values(activeSessions);
-  if (!sessions.length) { 
-    el.innerHTML = '<div style="text-align:center;color:var(--muted);padding:30px;background:var(--card);border:1px solid var(--border);border-radius:6px">Aucune session. Cliquez sur "+ Nouvelle Session".</div>'; 
-    return; 
-  }
-  el.innerHTML = sessions.slice().reverse().map(s => {
-    const link = buildCandidateLink(s.code);
-    return `
-    <div class="session-item">
-      <div class="session-info">
-        <div class="session-code">${s.code}</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:4px">${Object.keys(s.candidates||{}).length} participant(s) · ${s.questionsCount} questions · ${s.duration} min · Seuil ${s.passScore}%</div>
-        <div class="link-box" style="margin-top:10px">
-          <div class="link-box-label">🔗 Lien candidat — à envoyer par email / WhatsApp</div>
-          <div class="link-row">
-            <input class="link-input" type="text" value="${link}" readonly onclick="this.select()">
-            <button class="btn-copy" id="copy-btn-${s.code.replace(/-/g,'_')}" onclick="copySessionLink('${link}','copy-btn-${s.code.replace(/-/g,'_')}')">📋 Copier</button>
-          </div>
-        </div>
-      </div>
-      <div style="display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap;padding-left:10px">
-        <span class="${s.active?'badge-active':'badge-closed'}">${s.active?'ACTIVE':'TERMINÉE'}</span>
-        ${s.active?`<button class="btn-secondary btn-xs" onclick="closeSession('${s.code}')">Fermer</button>`:''}
-        <button class="btn-icon" onclick="deleteSession('${s.code}')" title="Supprimer">🗑</button>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-function copySessionLink(link, btnId) {
-  const btn = document.getElementById(btnId);
-  copyText(link, btn);
-}
-
-// ============================================================
-// QUESTION BANK (fonctions simplifiées pour la longueur)
-// ============================================================
-function filterQB(type, el) {
-  currentFilter = type;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  if (el) el.classList.add('active');
-  renderQB();
-}
-
-function renderQB() {
-  const list = document.getElementById('question-bank-list');
-  const search = (document.getElementById('qb-search')?.value||'').toLowerCase();
-  let filtered = currentFilter==='all' ? questionBank : questionBank.filter(q=>(q.type||'sc')===currentFilter);
-  if (search) filtered = filtered.filter(q => q.text.toLowerCase().includes(search));
-  const typeLabels = {tf:'Vrai/Faux',sc:'Choix simple',mc:'Choix multiple'};
-  list.innerHTML = filtered.length ? filtered.map(q => {
-    const qi = questionBank.indexOf(q);
-    const corrIdx = Array.isArray(q.answer)?q.answer[0]:(q.correct?q.correct[0]:q.answer);
-    return `
-    <div class="qb-item">
-      <div class="qb-check ${selectedForExam.has(q.id)?'checked':''}" onclick="toggleSelect(${q.id},this)"></div>
-      <div class="qb-info">
-        <div class="qb-text">${q.text}</div>
-        <div class="qb-tags">
-          <span class="qb-tag ${q.type||'sc'}">${typeLabels[q.type||'sc']}</span>
-          <span class="qb-tag">${q.chapter||q.category||'Général'}</span>
-          <span class="qb-tag">${q.points} pt${q.points>1?'s':''}</span>
-          <span class="qb-tag" style="border-color:var(--green-dark);color:var(--green)">✓ ${q.options[corrIdx]||'?'}</span>
-        </div>
-      </div>
-      <div class="qb-actions">
-        <button class="btn-icon edit" title="Éditer" onclick="editQuestion(${qi})">✏</button>
-        <button class="btn-icon" title="Supprimer" onclick="deleteQuestion(${qi})">✕</button>
-      </div>
-    </div>`;
-  }).join('') : '<div style="text-align:center;color:var(--muted);padding:30px">Aucune question trouvée.</div>';
-  document.getElementById('selected-count').textContent = selectedForExam.size;
-}
-
-function toggleSelect(id, el) { 
-  if(selectedForExam.has(id)) selectedForExam.delete(id); 
-  else selectedForExam.add(id); 
-  el.classList.toggle('checked'); 
-  document.getElementById('selected-count').textContent = selectedForExam.size; 
-}
-
-async function deleteQuestion(i) { 
-  const ok = await uniConfirm('Supprimer cette question ?','🗑️'); 
-  if(!ok) return; 
-  const id=questionBank[i].id; 
-  questionBank.splice(i,1); 
-  selectedForExam.delete(id); 
-  saveToStorage(); 
-  renderQB(); 
-  updateDashboard(); 
-}
-
-function editQuestion(i) { 
-  const q=questionBank[i]; 
-  editingQIndex=i; 
-  document.getElementById('add-title').textContent='Modifier la Question'; 
-  document.getElementById('new-q-type').value=q.type||'sc'; 
-  document.getElementById('new-q-chapter').value=q.chapter||q.category||'Règlement'; 
-  document.getElementById('new-q-points').value=q.points; 
-  document.getElementById('new-q-text').value=q.text; 
-  updateAnswerFields(q); 
-  adminNav('add',document.querySelector('.sidebar-item:nth-child(4)')); 
-}
-
-function selectAllQ() { questionBank.forEach(q=>selectedForExam.add(q.id)); renderQB(); }
-function deselectAllQ() { selectedForExam.clear(); renderQB(); }
-
-function updateAnswerFields(existingQ) {
-  const type = document.getElementById('new-q-type')?.value || 'sc';
-  const container = document.getElementById('answer-fields');
-  if (!container) return;
-  if (type === 'tf') {
-    const cur = existingQ ? (Array.isArray(existingQ.answer)?existingQ.answer[0]:(existingQ.correct?existingQ.correct[0]:existingQ.answer)) : 0;
-    container.innerHTML = `<div class="form-field"><label class="form-label">Bonne réponse</label><select class="config-input" id="new-q-tf-ans"><option value="0" ${cur===0?'selected':''}>Vrai</option><option value="1" ${cur===1?'selected':''}>Faux</option></select></div>`;
-  } else {
-    const nOpts = type==='mc' ? 5 : 4;
-    const existOpts = existingQ ? existingQ.options : [];
-    const existAns = existingQ ? (Array.isArray(existingQ.answer)?existingQ.answer:(existingQ.correct||[existingQ.answer])) : [0];
-    let html = `<div class="form-field"><label class="form-label">Options ${type==='mc'?'(cochez toutes les bonnes réponses)':'(cochez la bonne réponse)'}</label>`;
-    'ABCDE'.slice(0,nOpts).split('').forEach((l,i) => {
-      const checked = existAns.includes(i);
-      html += `<div class="option-row"><div class="option-label-badge">${l}</div><input type="text" class="form-input" id="new-opt-${i}" placeholder="Option ${l}..." value="${(existOpts[i]||'').replace(/"/g,'&quot;')}" style="flex:1;padding:8px 12px"><label style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:13px;color:var(--text);white-space:nowrap"><input type="${type==='mc'?'checkbox':'radio'}" name="correct-ans" value="${i}" ${checked?'checked':''} style="width:16px;height:16px;accent-color:var(--green)"> ✓</label></div>`;
-    });
-    html += '</div>';
-    container.innerHTML = html;
-  }
-}
-
-function saveQuestion() {
-  const type = document.getElementById('new-q-type').value;
-  const chapter = document.getElementById('new-q-chapter').value;
-  const text = document.getElementById('new-q-text').value.trim();
-  const points = parseFloat(document.getElementById('new-q-points').value)||1;
-  if (!text) { showToast('❌ Entrez le texte de la question','#dc2626'); return; }
-  let options, answer;
-  if (type==='tf') {
-    options=['Vrai','Faux']; 
-    answer=parseInt(document.getElementById('new-q-tf-ans').value);
-  } else {
-    const nOpts=type==='mc'?5:4; 
-    options=[];
-    for(let i=0;i<nOpts;i++){const v=document.getElementById(`new-opt-${i}`)?.value.trim(); if(v) options.push(v);}
-    if(options.length<2){showToast('❌ Minimum 2 options','#dc2626');return;}
-    const checked=[...document.querySelectorAll('input[name="correct-ans"]:checked')].map(el=>parseInt(el.value));
-    if(!checked.length){showToast('❌ Sélectionnez au moins une bonne réponse','#dc2626');return;}
-    answer=type==='mc'?checked:checked[0];
-  }
-  const q={id:editingQIndex>=0?questionBank[editingQIndex].id:Date.now(),type,chapter,text,points,options,answer};
-  if(editingQIndex>=0) questionBank[editingQIndex]=q; 
-  else { questionBank.push(q); selectedForExam.add(q.id); }
-  saveToStorage(); 
-  resetAddForm(); 
-  updateDashboard(); 
-  updateLandingStats();
-  showToast(editingQIndex>=0?'✅ Question modifiée !':'✅ Question ajoutée !','#16a34a');
-  editingQIndex=-1;
-  adminNav('questions',document.querySelector('.sidebar-item:nth-child(3)'));
-}
-
-function resetAddForm() { 
-  editingQIndex=-1; 
-  document.getElementById('add-title').textContent='Ajouter une Question'; 
-  document.getElementById('new-q-type').value='sc'; 
-  document.getElementById('new-q-chapter').value='Règlement'; 
-  document.getElementById('new-q-points').value='1'; 
-  document.getElementById('new-q-text').value=''; 
-  updateAnswerFields(); 
-}
-
-// ============================================================
-// IMPORT CSV (simplifié)
-// ============================================================
-function setupImportZone() {
-  const iz=document.getElementById('import-zone'), fi=document.getElementById('csv-file-input');
-  if(!iz||!fi) return;
-  iz.addEventListener('click',()=>fi.click());
-  fi.addEventListener('change',e=>{if(e.target.files[0]){const r=new FileReader();r.onload=e=>{document.getElementById('import-textarea').value=e.target.result;};r.readAsText(e.target.files[0]);}});
-}
-
-function parseCSV() {
-  const text=document.getElementById('import-textarea').value.trim();
-  if(!text){showToast('❌ Collez du contenu CSV','#dc2626');return;}
-  const lines=text.split('\n').filter(l=>l.trim()&&!l.toLowerCase().startsWith('cat'));
-  let added=0,errors=[];
-  lines.forEach((line,i)=>{
-    const p=line.split(';');
-    if(p.length>=7){
-      const opts=[p[2],p[3],p[4],p[5]].map(s=>s?.trim()).filter(Boolean);
-      const ci='ABCD'.indexOf(p[6]?.trim().toUpperCase());
-      if(p[1]?.trim()&&opts.length>=2&&ci>=0&&ci<opts.length){
-        const q={id:Date.now()+i,type:'sc',chapter:p[0]?.trim()||'Général',text:p[1].trim(),options:opts,answer:ci,points:Math.max(.5,Math.min(10,parseFloat(p[7])||1))};
-        questionBank.push(q);
-        selectedForExam.add(q.id);
-        added++;
-      } else errors.push('L.'+(i+2));
-    } else if(p.length>1) errors.push('L.'+(i+2));
-  });
-  if(added){
-    saveToStorage();
-    document.getElementById('import-result').innerHTML=`<div class="info-box success">✅ ${added} question(s) importée(s)${errors.length?' · ⚠️ '+errors.length+' erreur(s)':''}</div>`;
-    document.getElementById('import-textarea').value='';
-    updateDashboard();
-    updateLandingStats();
-  } else document.getElementById('import-result').innerHTML=`<div class="info-box error">❌ Aucune question valide. ${errors.join(', ')}</div>`;
-}
-
-// ============================================================
-// BULK ADD (simplifié)
-// ============================================================
-function generateBulkForm() {
-  const n=parseInt(document.getElementById('bulk-count').value)||5,cat=document.getElementById('bulk-cat').value,pts=document.getElementById('bulk-pts').value;
-  const cats=['Règlement','Technique','Arbitrage','Officials','Équipement','Méthodes & Notation','Fouls & Pénalités','Généralités'];
-  let h='';
-  for(let i=0;i<n;i++){
-    h+=`<div style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:14px;margin-bottom:10px">
-      <strong style="color:var(--gold);font-family:'Oswald',sans-serif">Q${i+1}</strong>
-      <input type="text" class="bqt" placeholder="Question..." style="width:100%;margin-top:8px;padding:8px 12px;background:var(--surface);border:1px solid var(--border);color:var(--text);border-radius:4px;font-size:14px">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px">
-        <input type="text" class="boa" placeholder="A" style="padding:6px 10px;background:var(--surface);border:1px solid var(--border);color:var(--text);border-radius:4px;font-size:13px">
-        <input type="text" class="bob" placeholder="B" style="padding:6px 10px;background:var(--surface);border:1px solid var(--border);color:var(--text);border-radius:4px;font-size:13px">
-        <input type="text" class="boc" placeholder="C" style="padding:6px 10px;background:var(--surface);border:1px solid var(--border);color:var(--text);border-radius:4px;font-size:13px">
-        <input type="text" class="bod" placeholder="D" style="padding:6px 10px;background:var(--surface);border:1px solid var(--border);color:var(--text);border-radius:4px;font-size:13px">
-      </div>
-      <div style="margin-top:8px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-        <span style="font-size:12px;color:var(--muted)">Bonne:</span>
-        <select class="bcr" style="padding:4px 8px;background:var(--surface);border:1px solid var(--border);color:var(--text);border-radius:4px">
-          <option value="0">A</option><option value="1">B</option><option value="2">C</option><option value="3">D</option>
-        </select>
-        <span style="font-size:12px;color:var(--muted)">Cat:</span>
-        <select class="bca" style="padding:4px 8px;background:var(--surface);border:1px solid var(--border);color:var(--text);border-radius:4px">
-          ${cats.map(c=>`<option ${c===cat?'selected':''}>${c}</option>`).join('')}
-        </select>
-        <span style="font-size:12px;color:var(--muted)">Pts:</span>
-        <input type="number" class="bpt" value="${pts}" min="0.5" max="10" step="0.5" style="width:55px;padding:4px 8px;background:var(--surface);border:1px solid var(--border);color:var(--text);border-radius:4px">
-      </div>
-    </div>`;
-  }
-  document.getElementById('bulk-container').innerHTML=h;
-  document.getElementById('bulk-actions').style.display='flex';
-}
-
-function saveBulkQuestions() {
-  let added=0;
-  document.querySelectorAll('#bulk-container > div').forEach((div,i)=>{
-    const text=div.querySelector('.bqt').value.trim();
-    const opts=[div.querySelector('.boa').value.trim(),div.querySelector('.bob').value.trim(),div.querySelector('.boc').value.trim(),div.querySelector('.bod').value.trim()].filter(Boolean);
-    if(text&&opts.length>=2){
-      const q={id:Date.now()+i,type:'sc',chapter:div.querySelector('.bca').value,text,options:opts,answer:parseInt(div.querySelector('.bcr').value),points:parseFloat(div.querySelector('.bpt').value)||1};
-      questionBank.push(q);
-      selectedForExam.add(q.id);
-      added++;
+    const u = document.getElementById('al-user').value;
+    const p = document.getElementById('al-pass').value;
+    const err = document.getElementById('al-error');
+    if (u === 'admin' && p === examConfig.adminPass) {
+        updateDashboard();
+        showScreen('admin');
+    } else {
+        err.style.display = 'block';
+        setTimeout(() => err.style.display = 'none', 3000);
     }
-  });
-  if(added){saveToStorage();showToast('✅ '+added+' question(s) ajoutée(s)!','#16a34a');clearBulkForm();updateDashboard();updateLandingStats();
-  } else showToast('❌ Remplissez le texte et 2 options minimum','#dc2626');
 }
 
-function clearBulkForm(){document.getElementById('bulk-container').innerHTML='<div style="text-align:center;color:var(--muted);padding:30px">Cliquez sur Générer.</div>';document.getElementById('bulk-actions').style.display='none';}
+function updateDashboard() {
+    document.getElementById('dash-q').textContent = questionBank.length;
+    document.getElementById('dash-s').textContent = Object.keys(activeSessions).length;
+    document.getElementById('dash-r').textContent = allResults.length;
+}
 
-// ============================================================
-// CONFIGURATION
-// ============================================================
-function syncConfigUI(){document.getElementById('cfg-title').value=examConfig.title;document.getElementById('cfg-duration').value=examConfig.duration;document.getElementById('cfg-nquestions').value=examConfig.nQuestions;document.getElementById('cfg-pass').value=examConfig.passThreshold;document.getElementById('cfg-shuffle').value=examConfig.shuffle?'1':'0';}
+function extractSessionCodeFromUrl() {
+    const urlParams = new URLSearchParams(window.location.search);
+    let code = urlParams.get('session') || urlParams.get('s');
+    if (code) return code.toUpperCase();
+    if (window.location.hash) {
+        const hash = window.location.hash.substring(1);
+        if (hash.includes('=')) {
+            const hashParams = new URLSearchParams(hash);
+            code = hashParams.get('session') || hashParams.get('s');
+            if (code) return code.toUpperCase();
+        }
+        if (hash.toUpperCase().startsWith('SESSION-')) return hash.toUpperCase();
+    }
+    return null;
+}
 
-function saveConfig(){examConfig.title=document.getElementById('cfg-title').value;examConfig.duration=parseInt(document.getElementById('cfg-duration').value)||60;examConfig.nQuestions=parseInt(document.getElementById('cfg-nquestions').value)||30;examConfig.passThreshold=parseInt(document.getElementById('cfg-pass').value)||60;examConfig.shuffle=document.getElementById('cfg-shuffle').value==='1';const np=document.getElementById('cfg-pass-admin').value;if(np)examConfig.adminPass=np;saveToStorage();updateLandingStats();showToast('✅ Configuration sauvegardée !','#16a34a');}
+function saveToStorage() {
+    localStorage.setItem('iwuf_qbank', JSON.stringify(questionBank));
+    localStorage.setItem('iwuf_sessions', JSON.stringify(activeSessions));
+    localStorage.setItem('iwuf_results', JSON.stringify(allResults));
+    localStorage.setItem('iwuf_config', JSON.stringify(examConfig));
+}
 
-// ============================================================
-// GOOGLE FORMS
-// ============================================================
-function syncGFormsUI(){document.getElementById('gforms-url').value=gFormsConfig.url||'';document.getElementById('gf-name-id').value=gFormsConfig.nameId||'';document.getElementById('gf-score-id').value=gFormsConfig.scoreId||'';document.getElementById('gf-session-id').value=gFormsConfig.sessionId||'';}
+function loadFromStorage() {
+    try {
+        const q = localStorage.getItem('iwuf_qbank'); if(q) questionBank = JSON.parse(q);
+        const s = localStorage.getItem('iwuf_sessions'); if(s) activeSessions = JSON.parse(s);
+        const r = localStorage.getItem('iwuf_results'); if(r) allResults = JSON.parse(r);
+        const c = localStorage.getItem('iwuf_config'); if(c) examConfig = {...examConfig, ...JSON.parse(c)};
+    } catch(e) {}
+}
 
-function saveGFormsConfig(){gFormsConfig.url=document.getElementById('gforms-url').value;gFormsConfig.nameId=document.getElementById('gf-name-id').value;gFormsConfig.scoreId=document.getElementById('gf-score-id').value;gFormsConfig.sessionId=document.getElementById('gf-session-id').value;saveToStorage();showToast('✅ Config Google Forms sauvegardée !','#16a34a');}
-
-function submitToGForms(name,session,pct){if(!gFormsConfig.url)return;try{const p=new URLSearchParams();if(gFormsConfig.nameId)p.set(gFormsConfig.nameId,name);if(gFormsConfig.scoreId)p.set(gFormsConfig.scoreId,pct+'%');if(gFormsConfig.sessionId)p.set(gFormsConfig.sessionId,session);fetch(gFormsConfig.url+(gFormsConfig.url.includes('?')?'&':'?')+p.toString(),{method:'POST',mode:'no-cors'}).catch(()=>{});}catch(e){}}
-
-// ============================================================
-// PUBLISH / EXPORT
-// ============================================================
-function copyFullHTML(){const html=document.documentElement.outerHTML;if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(html).then(()=>{const el=document.getElementById('copy-status');el.style.display='block';setTimeout(()=>el.style.display='none',3000);}).catch(()=>showToast('Utilisez Ctrl+U pour voir la source','#64748b'));}else showToast('Utilisez Ctrl+U pour voir la source','#64748b');}
-
-function downloadHTML(){const html='<!DOCTYPE html>\n'+document.documentElement.outerHTML;const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([html],{type:'text/html;charset=utf-8'}));a.download='IWUF_Examen_Arbitres.html';a.click();URL.revokeObjectURL(a.href);}
-
-// ============================================================
-// EXAM START
-// ============================================================
 function startExam() {
-  const code = document.getElementById('cand-session-code').value.trim().toUpperCase();
-  const name = document.getElementById('cand-name').value.trim();
-  const err = document.getElementById('cand-error');
-  err.style.display = 'none';
-  if (!code) { err.textContent='❌ Entrez le code de session'; err.style.display='block'; return; }
-  if (!name) { err.textContent='❌ Entrez votre nom complet'; err.style.display='block'; return; }
-  const session = activeSessions[code];
-  if (!session) { err.textContent='❌ Session introuvable. Vérifiez le code (ex: SESSION-ABC123)'; err.style.display='block'; return; }
-  if (!session.active) { err.textContent='❌ Cette session est terminée. Contactez l\'administrateur.'; err.style.display='block'; return; }
-  currentExam = { 
-    sessionCode:code, candidateName:name, questions:session.questions, 
-    answers:new Array(session.questions.length).fill(null), currentIndex:0, 
-    startTime:Date.now(), secondsLeft:session.duration*60, 
-    totalPoints:session.questions.reduce((s,q)=>s+q.points,0), 
-    passThreshold:session.passScore 
-  };
-  document.getElementById('exam-session-display').textContent = code;
-  document.getElementById('exam-candidate-name').textContent = name.split(' ')[0];
-  showScreen('exam');
-  buildQGrid(); 
-  renderExamQuestion(0); 
-  startTimer();
+    const code = document.getElementById('cand-session-code').value.trim().toUpperCase();
+    const name = document.getElementById('cand-name').value.trim();
+    const err = document.getElementById('cand-error');
+    err.style.display = 'none';
+    
+    if (!code) { err.textContent = '❌ Entrez le code de session'; err.style.display = 'block'; return; }
+    if (!name) { err.textContent = '❌ Entrez votre nom complet'; err.style.display = 'block'; return; }
+    
+    let session = activeSessions[code];
+    
+    if (!session && questionBank.length > 0) {
+        let pool = [...questionBank];
+        if (examConfig.shuffle) pool = pool.sort(() => Math.random() - 0.5);
+        const count = Math.min(examConfig.nQuestions, pool.length);
+        
+        session = {
+            code: code,
+            questions: pool.slice(0, count),
+            questionsCount: count,
+            duration: examConfig.duration,
+            passScore: examConfig.passThreshold,
+            active: true,
+            createdAt: new Date().toISOString(),
+            candidates: {}
+        };
+        activeSessions[code] = session;
+        saveToStorage();
+    }
+    
+    if (!session) { 
+        err.textContent = '❌ Session introuvable. Veuillez contacter l\'administrateur.'; 
+        err.style.display = 'block'; 
+        return; 
+    }
+    
+    if (!session.active) { 
+        err.textContent = '❌ Cette session est terminée.'; 
+        err.style.display = 'block'; 
+        return; 
+    }
+    
+    alert(`✅ Bienvenue ${name} !\n📋 Session: ${code}\n📊 ${session.questionsCount} questions\n⏱️ ${session.duration} minutes\n\nL'examen va commencer.`);
+    showScreen('landing');
 }
 
-// ============================================================
-// TIMER
-// ============================================================
-function startTimer(){clearInterval(timerInterval);updateTimerDisplay();timerInterval=setInterval(()=>{currentExam.secondsLeft--;updateTimerDisplay();if(currentExam.secondsLeft<=0){clearInterval(timerInterval);showToast('⏰ Temps écoulé !','#dc2626');finalSubmit();}},1000);}
-
-function updateTimerDisplay(){const m=Math.floor(currentExam.secondsLeft/60),s=currentExam.secondsLeft%60;document.getElementById('timer-val').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');document.getElementById('timer-box').classList.toggle('urgent',currentExam.secondsLeft<120);}
-
-// ============================================================
-// EXAM RENDER
-// ============================================================
-function buildQGrid(){document.getElementById('q-grid').innerHTML=currentExam.questions.map((_,i)=>`<button class="q-btn ${i===0?'current':''}" onclick="goToQuestion(${i})">${i+1}</button>`).join('');}
-
-function renderExamQuestion(i) {
-  const q=currentExam.questions[i], ans=currentExam.answers[i], n=currentExam.questions.length;
-  document.querySelectorAll('.q-btn').forEach((b,j)=>{b.className='q-btn';if(j===i)b.classList.add('current');else if(currentExam.answers[j]!==null)b.classList.add('answered');});
-  const tl={tf:'Vrai/Faux',sc:'Choix simple',mc:'Choix multiple'};
-  document.getElementById('q-type-badge').textContent=tl[q.type||'sc']+' · Q'+(i+1);
-  document.getElementById('q-type-badge').className='q-type-pill '+(q.type==='tf'?'tf':q.type==='mc'?'mc':'');
-  document.getElementById('q-points-badge').textContent=q.points+' pt'+(q.points>1?'s':'');
-  document.getElementById('question-text').textContent=q.text;
-  document.getElementById('q-counter').textContent='Question '+(i+1)+' / '+n;
-  document.getElementById('options-list').innerHTML=q.options.map((opt,oi)=>{const sel=ans!==null&&(Array.isArray(ans)?ans.includes(oi):ans===oi);return`<div class="option-item ${sel?'selected':''}" onclick="selectOption(${oi})"><div class="option-letter">${'ABCDE'[oi]}</div><div class="option-text">${opt}</div></div>`;}).join('');
-  const answered=currentExam.answers.filter(a=>a!==null).length;
-  document.getElementById('progress-text').textContent=answered+' / '+n+' répondu';
-  document.getElementById('progress-fill').style.width=(answered/n*100)+'%';
-  document.getElementById('exam-progress').style.width=(answered/n*100)+'%';
-  document.getElementById('sidebar-unanswered').textContent='Non répondu : '+(n-answered);
-  document.getElementById('btn-prev').style.display=i===0?'none':'';
-  document.getElementById('btn-next').style.display=i===n-1?'none':'';
-  document.getElementById('btn-submit').style.display=i===n-1?'':'none';
-}
-
-function selectOption(oi){const q=currentExam.questions[currentExam.currentIndex];if((q.type||'sc')==='mc'){if(!Array.isArray(currentExam.answers[currentExam.currentIndex]))currentExam.answers[currentExam.currentIndex]=[];const arr=currentExam.answers[currentExam.currentIndex],idx=arr.indexOf(oi);if(idx===-1)arr.push(oi);else arr.splice(idx,1);if(arr.length===0)currentExam.answers[currentExam.currentIndex]=null;}else currentExam.answers[currentExam.currentIndex]=oi;renderExamQuestion(currentExam.currentIndex);}
-
-function goToQuestion(i){currentExam.currentIndex=i;renderExamQuestion(i);}
-
-function prevQuestion(){if(currentExam.currentIndex>0){currentExam.currentIndex--;renderExamQuestion(currentExam.currentIndex);}}
-
-function nextQuestion(){if(currentExam.currentIndex<currentExam.questions.length-1){currentExam.currentIndex++;renderExamQuestion(currentExam.currentIndex);}}
-
-// ============================================================
-// SUBMIT
-// ============================================================
-async function confirmSubmit() {
-  const u=currentExam.answers.filter(a=>a===null).length, n=currentExam.questions.length;
-  const msg=u>0?`⚠️ <strong>${u} question(s)</strong> sans réponse.<br><small style="color:#64748b">Terminer quand même ?</small>`:`Toutes les questions sont répondues. Confirmer la soumission ?`;
-  const ok=await uniConfirm(msg, u>0?'⚠️':'✅');
-  if(ok) finalSubmit();
-}
-
-function finalSubmit() {
-  closeModal('submit-modal'); 
-  clearInterval(timerInterval);
-  const e=currentExam; 
-  let pts=0, cor=0;
-  e.questions.forEach((q,i)=>{const ans=e.answers[i]; if(ans===null)return; if(Array.isArray(q.answer)){const ua=(Array.isArray(ans)?ans:[ans]).slice().sort().join(',');if(ua===q.answer.slice().sort().join(','))pts+=q.points,cor++;}else{const c=q.correct?q.correct[0]:q.answer;if(ans===c)pts+=q.points,cor++;}});
-  const total=e.questions.reduce((s,q)=>s+q.points,0);
-  const pct=total>0?Math.round(pts/total*100):0;
-  const passed=pct>=e.passThreshold;
-  const ans=e.answers.filter(a=>a!==null).length;
-  const durationSec=Math.floor((Date.now()-e.startTime)/1000);
-  const wrong=e.questions.length-ans+(ans-cor);
-  const rec={id:Date.now(),sessionCode:e.sessionCode,candidateName:e.candidateName,earnedPoints:pts,totalPoints:total,percentage:pct,passed,answeredCount:ans,totalQuestions:e.questions.length,threshold:e.passThreshold,dateTime:new Date().toLocaleDateString('fr-FR')+' '+new Date().toTimeString().substring(0,5),durationSec,correctCount:cor,wrongCount:wrong};
-  if(activeSessions[e.sessionCode]?.candidates) activeSessions[e.sessionCode].candidates[e.candidateName]=rec;
-  allResults.push(rec); 
-  saveToStorage();
-  submitToGForms(e.candidateName,e.sessionCode,pct);
-  document.getElementById('result-header').className='results-header '+(passed?'pass':'fail');
-  document.getElementById('result-icon').textContent=passed?'🏆':'📋';
-  document.getElementById('result-score-big').textContent=pct+'%';
-  document.getElementById('result-verdict').textContent=passed?'RÉUSSI':'ÉCHEC';
-  document.getElementById('result-subtitle').textContent=passed?'Félicitations ! Vous êtes certifié(e).':'Seuil de '+e.passThreshold+'% non atteint.';
-  document.getElementById('rb-correct').textContent=cor;
-  document.getElementById('rb-wrong').textContent=wrong;
-  document.getElementById('rb-score').textContent=pts.toFixed(1)+' / '+total.toFixed(1);
-  document.getElementById('r-name').textContent=e.candidateName;
-  document.getElementById('r-session').textContent=e.sessionCode;
-  document.getElementById('r-answered').textContent=ans+' / '+e.questions.length;
-  document.getElementById('r-threshold').textContent=e.passThreshold+'%';
-  document.getElementById('r-duration').textContent=Math.floor(durationSec/60)+'m '+durationSec%60+'s';
-  showScreen('results');
-}
-
-// ============================================================
-// ADMIN RESULTS
-// ============================================================
-function renderAdminResults() {
-  const t=allResults.length, p=allResults.filter(r=>r.passed).length;
-  document.getElementById('res-total').textContent=t;
-  document.getElementById('res-pass').textContent=p;
-  document.getElementById('res-fail').textContent=t-p;
-  document.getElementById('res-avg').textContent=t?Math.round(allResults.reduce((s,r)=>s+r.percentage,0)/t)+'%':'—';
-  const tbody=document.getElementById('results-table-body');
-  if(!t){tbody.innerHTML='<tr><td colspan="7" style="text-align:center;padding:20px;color:var(--muted)">Aucun résultat</td></tr>';return;}
-  tbody.innerHTML=allResults.slice().reverse().map(r=>`
-    <tr>
-      <td style="font-size:12px">${r.dateTime}</td>
-      <td style="font-family:Oswald,sans-serif">${r.sessionCode}</td>
-      <td>${r.candidateName}</td>
-      <td><strong>${(+r.earnedPoints).toFixed(1)} / ${(+r.totalPoints).toFixed(1)}</strong></td>
-      <td><strong style="color:${r.passed?'var(--green)':'var(--red)'}">${r.percentage}%</strong></td>
-      <td><span class="${r.passed?'badge-pass':'badge-fail'}">${r.passed?'✓ RÉUSSI':'✗ ÉCHEC'}</span></td>
-      <td style="color:var(--muted)">${Math.floor(r.durationSec/60)}m${r.durationSec%60}s</td>
-    </tr>`).join('');
-}
-
-// ============================================================
-// SESSION ANALYSIS
-// ============================================================
-function populateSessionSelect(){const sel=document.getElementById('sa-select');const codes=[...new Set(allResults.map(r=>r.sessionCode))].sort();sel.innerHTML='<option value="all">— Toutes —</option>'+codes.map(c=>`<option value="${c}">${c}</option>`).join('');}
-
-function renderAnalysis(){
-  const code=document.getElementById('sa-select').value;
-  let data=code==='all'?allResults:allResults.filter(r=>r.sessionCode===code);
-  data=data.slice().sort((a,b)=>b.percentage-a.percentage||a.durationSec-b.durationSec);
-  const t=data.length,p=data.filter(r=>r.passed).length;
-  const avg=t?Math.round(data.reduce((s,r)=>s+r.percentage,0)/t):null;
-  document.getElementById('sa-total').textContent=t||'—';
-  document.getElementById('sa-pass').textContent=t?p:'—';
-  document.getElementById('sa-fail').textContent=t?(t-p):'—';
-  document.getElementById('sa-avg').textContent=avg!==null?avg+'%':'—';
-  document.getElementById('sa-top').textContent=t?data[0].percentage+'%':'—';
-  document.getElementById('sa-count').textContent=t?t+' résultat(s)':'';
-  if(!t){document.getElementById('sa-tbody').innerHTML='<tr><td colspan="8" style="text-align:center;padding:30px;color:var(--muted)">Aucun résultat</td></tr>';return;}
-  let rank=1;
-  document.getElementById('sa-tbody').innerHTML=data.map((r,i)=>{if(i>0&&r.percentage<data[i-1].percentage)rank=i+1;const medal=rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':rank;return`<tr><td style="text-align:center;font-size:16px">${medal}</td><td><strong>${r.candidateName}</strong></td><td style="font-family:Oswald,sans-serif;color:var(--gold)">${r.sessionCode}</td><td style="font-size:12px;color:var(--muted)">${r.dateTime}</td><td><strong>${(+r.earnedPoints).toFixed(1)} / ${(+r.totalPoints).toFixed(1)}</strong></td><td><strong style="color:${r.passed?'var(--green)':'var(--red)'}">${r.percentage}%</strong></td><td><span class="${r.passed?'badge-pass':'badge-fail'}">${r.passed?'✓ RÉUSSI':'✗ ÉCHEC'}</span></td><td style="color:var(--muted)">${Math.floor(r.durationSec/60)}m${String(r.durationSec%60).padStart(2,'0')}s</td></tr>`;}).join('');
-}
-
-function exportSessionCSV(){if(!allResults.length){showToast('Aucun résultat','#64748b');return;}const code=document.getElementById('sa-select').value;let data=code==='all'?allResults:allResults.filter(r=>r.sessionCode===code);data=data.slice().sort((a,b)=>b.percentage-a.percentage);let rank=1;const rows=[['Rang','Nom','Session','Date','Score','Total','%','Résultat','Durée']];data.forEach((r,i)=>{if(i>0&&r.percentage<data[i-1].percentage)rank=i+1;rows.push([rank,r.candidateName,r.sessionCode,r.dateTime,r.earnedPoints,r.totalPoints,r.percentage+'%',r.passed?'RÉUSSI':'ÉCHEC',Math.floor(r.durationSec/60)+'m'+String(r.durationSec%60).padStart(2,'0')+'s']);});const csv=rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(';')).join('\n');const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent('\uFEFF'+csv);a.download='analyse_'+(code==='all'?'toutes':code)+'_'+new Date().toISOString().split('T')[0]+'.csv';a.click();}
-
-function exportCSV(){if(!allResults.length){showToast('Aucun résultat','#64748b');return;}const csv=[['Date','Session','Arbitre','Points','Total','%','Résultat','Durée']].concat(allResults.map(r=>[r.dateTime,r.sessionCode,r.candidateName,r.earnedPoints,r.totalPoints,r.percentage+'%',r.passed?'RÉUSSI':'ÉCHEC',Math.floor(r.durationSec/60)+'m'+r.durationSec%60+'s'])).map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(';')).join('\n');const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent('\uFEFF'+csv);a.download='resultats_iwuf_'+new Date().toISOString().split('T')[0]+'.csv';a.click();}
-
-async function clearAllResults(){const ok=await uniConfirm('Effacer <strong>TOUS</strong> les résultats ?<br><small style="color:#ef4444">Action irréversible.</small>','🗑️');if(ok){allResults=[];Object.values(activeSessions).forEach(s=>{if(s.candidates)s.candidates={};});saveToStorage();renderAdminResults();showToast('🗑️ Résultats effacés','#dc2626');}}
-
-// ============================================================
-// PRINT REPORT
-// ============================================================
-function printReport() {
-  if(!allResults.length) { showToast('Aucun résultat à imprimer','#64748b'); return; }
-  const rec = allResults[allResults.length-1];
-  const pct=rec.percentage, passed=rec.passed;
-  const hBg=passed?'linear-gradient(135deg,#064e3b,#16a34a)':'linear-gradient(135deg,#7f1d1d,#b91c1c)';
-  const html=`<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><title>Rapport — ${rec.candidateName}</title>
-  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Source Sans 3',sans-serif;background:#fff;color:#1e293b;font-size:13px}@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}.no-print{display:none!important}@page{size:A4;margin:12mm}}.pbtn{position:fixed;bottom:20px;right:20px;padding:12px 24px;background:linear-gradient(135deg,#003a7d,#1a7fd4);color:#fff;border:none;border-radius:8px;font-family:'Oswald',sans-serif;font-size:14px;letter-spacing:1px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.2)}</style>
-  </head><body>
-  <button class="pbtn no-print" onclick="window.print()">🖨️ Imprimer / PDF</button>
-  <div style="max-width:780px;margin:0 auto;padding:24px">
-    <div style="background:${hBg};border-radius:12px;padding:28px;text-align:center;color:#fff;margin-bottom:20px">
-      <div style="font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:3px;opacity:.8;margin-bottom:6px">IWUF — CERTIFICATION ARBITRE SANDA 2024</div>
-      <div style="font-family:'Oswald',sans-serif;font-size:52px;font-weight:700;line-height:1">${pct}%</div>
-      <div style="font-family:'Oswald',sans-serif;font-size:22px;font-weight:700;letter-spacing:2px;margin:6px 0">${passed?'✓ RÉUSSI':'✗ ÉCHEC'}</div>
-      <div style="font-size:13px;opacity:.85">${passed?'Félicitations ! Certification validée.':'Seuil de '+rec.threshold+'% non atteint.'}</div>
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px">
-      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:14px;text-align:center"><div style="font-family:'Oswald',sans-serif;font-size:24px;font-weight:700;color:#16a34a">${rec.correctCount}</div><div style="font-size:10px;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;margin-top:3px">Correctes</div></div>
-      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:14px;text-align:center"><div style="font-family:'Oswald',sans-serif;font-size:24px;font-weight:700;color:#dc2626">${rec.wrongCount}</div><div style="font-size:10px;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;margin-top:3px">Incorrectes</div></div>
-      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:14px;text-align:center"><div style="font-family:'Oswald',sans-serif;font-size:24px;font-weight:700;color:#005ab5">${(+rec.earnedPoints).toFixed(1)} / ${(+rec.totalPoints).toFixed(1)}</div><div style="font-size:10px;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;margin-top:3px">Points</div></div>
-    </div>
-    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:14px;margin-bottom:20px">
-      <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #e2e8f0;font-size:13px"><span style="color:#64748b">Arbitre</span><strong>${rec.candidateName}</strong></div>
-      <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #e2e8f0;font-size:13px"><span style="color:#64748b">Session</span><strong>${rec.sessionCode}</strong></div>
-      <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #e2e8f0;font-size:13px"><span style="color:#64748b">Date</span><strong>${rec.dateTime}</strong></div>
-      <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #e2e8f0;font-size:13px"><span style="color:#64748b">Questions répondues</span><strong>${rec.answeredCount} / ${rec.totalQuestions}</strong></div>
-      <div style="display:flex;justify-content:space-between;padding:7px 0;font-size:13px"><span style="color:#64748b">Durée</span><strong>${Math.floor(rec.durationSec/60)}m ${rec.durationSec%60}s</strong></div>
-    </div>
-    <div style="text-align:center;padding-top:16px;border-top:1px solid #e2e8f0;font-size:11px;color:#94a3b8">IWUF — Système d'Examen des Arbitres Sanda · Règlement 2024 · ${new Date().toLocaleString('fr-FR')}</div>
-  </div></body></html>`;
-  const w=window.open('','_blank');
-  if(w){w.document.write(html);w.document.close();}else showToast('Autorisez les popups pour imprimer','#f97316');
-}
-
-// ============================================================
-// DEFAULT QUESTIONS (98 questions Sanda)
-// ============================================================
-function loadDefaultQuestions() {
-  questionBank = [
-    {id:1,type:'sc',chapter:'Généralités',text:'Combien de rounds dispute-t-on en compétition Sanda adulte?',points:1,options:['1 round','2 rounds','3 rounds','4 rounds'],answer:2},
-    {id:2,type:'sc',chapter:'Méthodes & Notation',text:'Combien de points rapporte un coup de pied à la tête validé?',points:1,options:['1 point','2 points','3 points','0 point'],answer:1},
-    {id:3,type:'sc',chapter:'Fouls & Pénalités',text:'Combien de fautes personnelles entraînent la disqualification?',points:1,options:['2','3','4','5'],answer:1},
-    {id:4,type:'sc',chapter:'Équipement',text:'Quelle est la surface standard de la plateforme Sanda (leitai)?',points:1,options:['6×6 m','8×8 m','10×10 m','12×12 m'],answer:1},
-    {id:5,type:'sc',chapter:'Généralités',text:'Quelle est la durée d\'un round en compétition Sanda adulte?',points:1,options:['1 min 30','2 minutes','3 minutes','5 minutes'],answer:1},
-    {id:6,type:'sc',chapter:'Méthodes & Notation',text:'Un coup de poing au torse ou à la tête validé rapporte combien de points?',points:1,options:['0 point','1 point','2 points','3 points'],answer:1},
-    {id:7,type:'sc',chapter:'Fouls & Pénalités',text:'Un avertissement donne combien de points à l\'adversaire?',points:1,options:['0 point','1 point','2 points','3 points'],answer:2},
-    {id:8,type:'sc',chapter:'Généralités',text:'Le combat est remporté par qui remporte combien de rounds?',points:1,options:['1 round','2 rounds','3 rounds','4 rounds'],answer:1},
-    {id:9,type:'tf',chapter:'Fouls & Pénalités',text:'Les coudes sont autorisés en Sanda compétition.',points:1,options:['Vrai','Faux'],answer:1},
-    {id:10,type:'sc',chapter:'Méthodes & Notation',text:'Que se passe-t-il si les deux concurrents tombent du plateau simultanément?',points:1,options:['1 point chacun','2 points chacun','Aucun point pour personne','1 point au concurrent dominant'],answer:0},
-    {id:11,type:'sc',chapter:'Officials',text:'Combien d\'arbitres composent le panel en compétition IWUF?',points:1,options:['1 arbitre principal + 2 juges','1 arbitre de plateforme + 3 juges','1 arbitre central + 4 juges latéraux','2 arbitres + 1 juge principal'],answer:1},
-    {id:12,type:'sc',chapter:'Équipement',text:'Quelle est la hauteur minimale de la plateforme Sanda au-dessus du sol?',points:1,options:['40 cm','50 cm','60 cm','80 cm'],answer:2},
-    {id:13,type:'sc',chapter:'Méthodes & Notation',text:'Un coup de pied circulaire à la tête rapporte combien de points?',points:1,options:['1','2','3','4'],answer:1},
-    {id:14,type:'tf',chapter:'Généralités',text:'En Sanda, les genoux sont une zone d\'attaque autorisée.',points:1,options:['Vrai','Faux'],answer:1},
-    {id:15,type:'sc',chapter:'Fouls & Pénalités',text:'Quelle sanction s\'applique pour un clinch prolongé >2 secondes sans projection?',points:1,options:['Avertissement','Admonestation','Disqualification directe','Aucune sanction'],answer:1}
-  ];
-  // Ajout de questions supplémentaires pour compléter...
-  for(let i=16;i<=98;i++) {
-    if(i<=20) questionBank.push({id:i,type:'sc',chapter:'Généralités',text:'Question supplémentaire '+i,points:1,options:['A','B','C','D'],answer:0});
-    else if(i<=30) questionBank.push({id:i,type:'tf',chapter:'Règlement',text:'Règle '+i,points:1,options:['Vrai','Faux'],answer:0});
-    else if(i<=50) questionBank.push({id:i,type:'sc',chapter:'Arbitrage',text:'Situation d\'arbitrage '+i,points:1,options:['A','B','C','D'],answer:0});
-    else if(i<=70) questionBank.push({id:i,type:'sc',chapter:'Technique',text:'Technique '+i,points:1,options:['A','B','C','D'],answer:0});
-    else if(i<=85) questionBank.push({id:i,type:'sc',chapter:'Équipement',text:'Équipement '+i,points:1,options:['A','B','C','D'],answer:0});
-    else questionBank.push({id:i,type:'mc',chapter:'Fouls & Pénalités',text:'Faute '+i,points:2,options:['A','B','C','D','E'],answer:[0,1]});
-  }
-  saveToStorage();
-  selectedForExam = new Set(questionBank.map(q => q.id));
-}
+// ============ INITIALISATION ============
+window.addEventListener('DOMContentLoaded', () => {
+    loadFromStorage();
+    
+    if (questionBank.length === 0) {
+        questionBank = [
+            {id:1, type:'sc', chapter:'Généralités', text:'Combien de rounds dispute-t-on en compétition Sanda adulte?', points:1, options:['1 round','2 rounds','3 rounds','4 rounds'], answer:2},
+            {id:2, type:'sc', chapter:'Méthodes & Notation', text:'Combien de points rapporte un coup de pied à la tête validé?', points:1, options:['1 point','2 points','3 points','0 point'], answer:1},
+            {id:3, type:'sc', chapter:'Fouls & Pénalités', text:'Combien de fautes personnelles entraînent la disqualification?', points:1, options:['2','3','4','5'], answer:1},
+            {id:4, type:'sc', chapter:'Équipement', text:'Quelle est la surface standard de la plateforme Sanda (leitai)?', points:1, options:['6×6 m','8×8 m','10×10 m','12×12 m'], answer:1},
+            {id:5, type:'sc', chapter:'Généralités', text:'Quelle est la durée d\'un round en compétition Sanda adulte?', points:1, options:['1 min 30','2 minutes','3 minutes','5 minutes'], answer:1},
+            {id:6, type:'tf', chapter:'Fouls & Pénalités', text:'Les coudes sont autorisés en Sanda compétition.', points:1, options:['Vrai','Faux'], answer:1},
+            {id:7, type:'sc', chapter:'Officials', text:'Combien d\'arbitres composent le panel en compétition IWUF?', points:1, options:['1 arbitre principal + 2 juges','1 arbitre de plateforme + 3 juges','1 arbitre central + 4 juges latéraux','2 arbitres + 1 juge principal'], answer:1},
+            {id:8, type:'tf', chapter:'Méthodes & Notation', text:'Une projection valide rapporte 2 points.', points:1, options:['Vrai','Faux'], answer:0},
+            {id:9, type:'sc', chapter:'Généralités', text:'Catégorie poids la plus légère Senior masculin?', points:1, options:['48 kg','52 kg','56 kg','60 kg'], answer:1},
+            {id:10, type:'tf', chapter:'Équipement', text:'Le protège-dents est obligatoire.', points:1, options:['Vrai','Faux'], answer:0}
+        ];
+        saveToStorage();
+    }
+    
+    document.getElementById('landing-q-count').textContent = questionBank.length;
+    document.getElementById('landing-duration').textContent = examConfig.duration;
+    document.getElementById('landing-pass').textContent = examConfig.passThreshold;
+    
+    const sessionCode = extractSessionCodeFromUrl();
+    if (sessionCode) {
+        const input = document.getElementById('cand-session-code');
+        const notice = document.getElementById('prefilled-notice');
+        if (input) {
+            input.value = sessionCode;
+            notice.style.display = 'block';
+        }
+    }
+});
 </script>
 </body>
 </html>
