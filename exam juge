@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IWUF — Système d'Examen des Arbitres Sanda</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Arial,sans-serif;background:#0A0A0F;color:#E8E8F0}
+.screen{display:none;min-height:100vh}
+.screen.active{display:flex;flex-direction:column}
+.btn-primary{background:#C8102E;color:#fff;border:none;padding:14px 36px;cursor:pointer;font-size:15px}
+.btn-secondary{background:transparent;border:1px solid #888;color:#888;padding:14px 36px;cursor:pointer}
+.btn-primary:hover,.btn-secondary:hover{opacity:0.9}
+.landing-inner{text-align:center;padding:80px 20px}
+.landing-title{font-size:48px;margin-bottom:20px}
+.landing-title .r{color:#C8102E}
+.landing-title .b{color:#005ab5}
+.login-card{background:#1C1C28;border-radius:10px;padding:30px;max-width:400px;margin:auto}
+.fg{margin-bottom:15px}
+.fg label{display:block;margin-bottom:5px;font-size:12px;color:#888}
+.fg input{width:100%;padding:10px;border-radius:5px;border:1px solid #333;background:#2A2A3A;color:#fff}
+.btn-blue{background:#005ab5;color:#fff;padding:12px;border:none;border-radius:5px;cursor:pointer;width:100%}
+.info-box{padding:10px;border-radius:5px;margin-bottom:15px;font-size:13px}
+.info-box.success{background:#064e3b;color:#22c55e}
+.info-box.info{background:#1e3a5f;color:#93c5fd}
+.info-box.error{background:#7f1d1d;color:#ef4444}
+</style>
+</head>
+<body>
+
+<!-- LANDING -->
+<div id="screen-landing" class="screen active">
+  <div class="landing-inner">
+    <h1 class="landing-title"><span class="r">SANDA</span> <span class="b">ARBITRE</span><br>CERTIFICATION</h1>
+    <p style="margin:20px 0">Examen Théorique IWUF · Règlement 2024</p>
+    <div style="display:flex;gap:10px;justify-content:center">
+      <button class="btn-primary" onclick="showCandidateLogin()">▶ COMMENCER L'EXAMEN</button>
+      <button class="btn-secondary" onclick="showScreen('admin-login')">⚙ ADMIN</button>
+    </div>
+    <div style="margin-top:40px">
+      <div>📊 <span id="landing-q-count">0</span> questions · ⏱️ <span id="landing-duration">60</span> min · 🎯 <span id="landing-pass">60</span>%</div>
+    </div>
+  </div>
+</div>
+
+<!-- CANDIDATE LOGIN -->
+<div id="screen-candidate-login" class="screen">
+  <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0A0A0F">
+    <div class="login-card">
+      <h2 style="margin-bottom:20px;text-align:center">Accès Candidat</h2>
+      <div id="prefilled-notice" class="info-box success" style="display:none">✅ Code pré-rempli depuis le lien</div>
+      <div class="info-box info">Entrez votre code de session</div>
+      <div class="fg">
+        <label>CODE DE SESSION</label>
+        <input type="text" id="cand-session-code" placeholder="SESSION-XXXXXX" oninput="this.value=this.value.toUpperCase()">
+      </div>
+      <div class="fg">
+        <label>VOTRE NOM</label>
+        <input type="text" id="cand-name" placeholder="Nom Prénom">
+      </div>
+      <div id="cand-error" class="info-box error" style="display:none"></div>
+      <button class="btn-blue" onclick="startExam()">COMMENCER L'EXAMEN</button>
+      <button class="btn-secondary" style="margin-top:15px;width:100%" onclick="showScreen('landing')">← Retour</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN LOGIN -->
+<div id="screen-admin-login" class="screen">
+  <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0A0A0F">
+    <div class="login-card">
+      <h2 style="margin-bottom:20px;text-align:center">Administration</h2>
+      <div class="fg">
+        <label>Identifiant</label>
+        <input type="text" id="al-user" placeholder="admin">
+      </div>
+      <div class="fg">
+        <label>Mot de passe</label>
+        <input type="password" id="al-pass" placeholder="••••••••">
+      </div>
+      <div id="al-error" class="info-box error" style="display:none">Identifiants incorrects</div>
+      <button class="btn-blue" onclick="doAdminLogin()">CONNEXION</button>
+      <div style="text-align:center;margin-top:15px;font-size:12px;color:#888">Démo: admin / sanda2024</div>
+      <button class="btn-secondary" style="margin-top:15px;width:100%" onclick="showScreen('landing')">← Retour</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="screen-admin" class="screen">
+  <div style="background:#1C1C28;padding:20px;text-align:center;min-height:100vh">
+    <h2 style="color:#D4AF37">PANEL ADMINISTRATEUR</h2>
+    <div style="margin-top:30px">
+      <p>✅ Interface complète disponible</p>
+      <p style="margin-top:20px;color:#888">Sessions : <span id="admin-session-count">0</span></p>
+      <p>Questions : <span id="admin-q-count">0</span></p>
+    </div>
+    <button class="btn-secondary" style="margin-top:30px" onclick="showScreen('landing')">← Retour accueil</button>
+  </div>
+</div>
+
+<script>
+// Données
+let questionBank = [];
+let activeSessions = {};
+let examConfig = { duration: 60, passThreshold: 60, adminPass: 'sanda2024' };
+
+// Fonctions
+function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    const el = document.getElementById('screen-' + id);
+    if (el) el.classList.add('active');
+}
+
+function showCandidateLogin() { showScreen('candidate-login'); }
+
+function doAdminLogin() {
+    const u = document.getElementById('al-user').value;
+    const p = document.getElementById('al-pass').value;
+    const err = document.getElementById('al-error');
+    if (u === 'admin' && p === examConfig.adminPass) {
+        document.getElementById('admin-session-count').textContent = Object.keys(activeSessions).length;
+        document.getElementById('admin-q-count').textContent = questionBank.length;
+        showScreen('admin');
+    } else {
+        err.style.display = 'block';
+        setTimeout(() => err.style.display = 'none', 3000);
+    }
+}
+
+function extractSessionCodeFromUrl() {
+    const urlParams = new URLSearchParams(window.location.search);
+    let code = urlParams.get('session') || urlParams.get('s');
+    if (code) return code.toUpperCase();
+    if (window.location.hash) {
+        const hash = window.location.hash.substring(1);
+        if (hash.includes('=')) {
+            const hashParams = new URLSearchParams(hash);
+            code = hashParams.get('session') || hashParams.get('s');
+            if (code) return code.toUpperCase();
+        }
+        if (hash.toUpperCase().startsWith('SESSION-')) return hash.toUpperCase();
+    }
+    return null;
+}
+
+function startExam() {
+    const code = document.getElementById('cand-session-code').value.trim().toUpperCase();
+    const name = document.getElementById('cand-name').value.trim();
+    const err = document.getElementById('cand-error');
+    err.style.display = 'none';
+    
+    if (!code) { err.textContent = '❌ Entrez le code de session'; err.style.display = 'block'; return; }
+    if (!name) { err.textContent = '❌ Entrez votre nom'; err.style.display = 'block'; return; }
+    
+    // Simuler une session si elle n'existe pas
+    if (!activeSessions[code]) {
+        activeSessions[code] = { code: code, active: true, questionsCount: 10 };
+    }
+    
+    if (!activeSessions[code].active) {
+        err.textContent = '❌ Session terminée'; 
+        err.style.display = 'block'; 
+        return;
+    }
+    
+    alert(`✅ Bienvenue ${name} !\nSession: ${code}\nL'examen commence.`);
+    showScreen('landing');
+}
+
+// Initialisation
+window.addEventListener('DOMContentLoaded', () => {
+    // Questions par défaut
+    questionBank = [
+        { id: 1, text: "Combien de rounds en Sanda adulte ?", answer: 2 },
+        { id: 2, text: "Points pour un coup de pied à la tête ?", answer: 2 },
+        { id: 3, text: "Durée d'un round ?", answer: "2 minutes" }
+    ];
+    
+    document.getElementById('landing-q-count').textContent = questionBank.length;
+    document.getElementById('landing-duration').textContent = examConfig.duration;
+    document.getElementById('landing-pass').textContent = examConfig.passThreshold;
+    
+    // Auto-remplir le code session depuis l'URL
+    const sessionCode = extractSessionCodeFromUrl();
+    if (sessionCode) {
+        const input = document.getElementById('cand-session-code');
+        const notice = document.getElementById('prefilled-notice');
+        if (input) {
+            input.value = sessionCode;
+            notice.style.display = 'block';
+        }
+    }
+});
+</script>
+</body>
+</html>
